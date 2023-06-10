@@ -8,7 +8,7 @@ const config = {
     dbName: process.env.DB_NAME || "DB_GREENRUN",
     dbPort: process.env.DB_PORT || "3306",
     dbHos: process.env.DB_HOST || "127.0.0.1",
-    dbPassword: process.env.DB_PASSWORD || "",
+    dbPassword: process.env.DB_PASSWORD || "root",
     host: process.env.HOST || "127.0.0.1",
 };
 

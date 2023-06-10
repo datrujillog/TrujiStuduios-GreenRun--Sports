@@ -19,6 +19,7 @@ const sequelize = new Sequelize(config.dbName, config.dbUser, config.dbPassword,
     },
 });
 
+
 // const Character = CharacterFactory(sequelize, Sequelize);
 // const Film = filmsFactory(sequelize, Sequelize);
 // const Gender = gendersFactory(sequelize, Sequelize);
@@ -28,14 +29,20 @@ const UserBets = UserBetFactory(sequelize, Sequelize)
 const Bets = BetFactory(sequelize, Sequelize)
 
 //ACA VAMOS HACER LAS RELACIONES ENTRE LAS TABLAS DE NUESTRO MODELO DE DATOS
-// Character.belongsToMany(Film, { through: 'CharacterFilm' });
-// Film.belongsToMany(Character, { through: 'CharacterFilm' });
-// Gender.hasMany(Film);
-// Film.belongsTo(Gender);
-// User.hasMany(Character);
-// Character.belongsTo(User);
-// User.hasMany(Film);
-// Film.belongsTo(User);
+
+//Relacion de un User a muchos UserBets 1:M
+User.hasMany(UserBets, {foreignKey: 'userId', sourceKey: 'id'}); 
+UserBets.belongsTo(User, {foreignKey: 'userId', sourceKey: 'id'}); 
+
+
+//Relacion de un User a muchos Transactions 1:M
+User.hasMany(Transaction, {foreignKey: 'userId', sourceKey: 'id'});
+Transaction.belongsTo(User, {foreignKey: 'userId', sourceKey: 'id'});
+
+
+//Relacion de Bets a UserBets 1:M
+Bets.hasMany(UserBets, {foreignKey: 'betId', sourceKey: 'id'});
+UserBets.belongsTo(Bets, {foreignKey: 'betId', sourceKey: 'id'});
 
 
 
@@ -45,6 +52,9 @@ module.exports = {
     Transaction,
     UserBets,
     Bets
-
-
+    
+    
 }
+// Relacion de muchos User a muchos UserBets M:M
+// User.belongsToMany(UserBets, {through: 'UserBets', foreignKey: 'userId', sourceKey: 'id'});
+// UserBets.belongsToMany(User, {through: 'UserBets', foreignKey: 'userBetId', sourceKey: 'id'});

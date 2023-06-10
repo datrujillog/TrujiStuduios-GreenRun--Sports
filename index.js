@@ -8,6 +8,7 @@ require('colors');
 
 // importamos las rutas
 const Users = require('./src/routes/userRoute');
+const auth = require('./src/routes/authRoute');
 
 
 //Utilizamos Middlewares
@@ -22,6 +23,7 @@ app.use(express.urlencoded({extended: true}));
 
 // Utilizamos las rutas
 Users(app);
+auth(app);
 
 app.get('/', (req, res) => {
     res.json({message: "Hello World"});

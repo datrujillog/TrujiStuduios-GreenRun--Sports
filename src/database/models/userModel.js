@@ -20,6 +20,10 @@ module.exports = (sequelize) => {
       allowNull: false,
       defaultValue: 1,
     },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     phone: {
       type: DataTypes.STRING,
       allowNull: false,

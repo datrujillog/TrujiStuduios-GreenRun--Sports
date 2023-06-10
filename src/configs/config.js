@@ -10,6 +10,7 @@ const config = {
     dbHos: process.env.DB_HOST || "127.0.0.1",
     dbPassword: process.env.DB_PASSWORD || "root",
     host: process.env.HOST || "127.0.0.1",
+    jwtSecret: process.env.JWT_SECRET || "secret",
 };
 
 

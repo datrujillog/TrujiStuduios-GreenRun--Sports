@@ -7,8 +7,15 @@ class UserService{
         try{
             // console.log("getAll");
             const count = await User.count();
-            const users = await User.findAll();
-            // console.log(users);
+            if(count === 0){
+                return {
+                    count,
+                    messge: "No hay usuarios"
+                }
+            }
+            //listar solo los usuarios que no esten borrados
+            const users = await User.findAll({where: {deleted: false}});
+                   
             return {
                 count,
                 users
@@ -57,21 +64,44 @@ class UserService{
         }
     }
 
+    //borrar el usuario por id pero no lo borra de la base de datos con el campo deleted 
     async delete(id){
         try{
-            const user = await User.destroy({
-                where: {
-                    id
+            const user = await User.findByPk(id);
+            if(user){
+                user.deleted = true;
+                await user.save(); 
+                return {
+                    deleted: true,
+                    data: user
                 }
-            });
-            return {
-                deleted: true,
-                data: user
+            }else{
+                throw new Error('User not found');
             }
+
+
+               
         }catch(err){
             throw err;
         }
     }
+    
+
+    // async delete(id){
+    //     try{
+    //         const user = await User.destroy({
+    //             where: {
+    //                 id
+    //             }
+    //         });
+    //         return {
+    //             deleted: true,
+    //             data: user
+    //         }
+    //     }catch(err){
+    //         throw err;
+    //     }
+    // }
 
     
 

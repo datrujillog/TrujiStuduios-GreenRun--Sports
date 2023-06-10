@@ -18,6 +18,14 @@ function usersRouter(app) {
     router.post('/', (req, res) => {
         res.json({message: "Hello World ROUTER POST"});
     });
+
+    //cambiar el estado del usuario a deleted = true 
+    router.put('/:id', (req, res) => {
+        const {id} = req.params;
+        const result = userServ.delete(id);
+        res.json(result);
+    });
+    
 }
 
 module.exports = usersRouter;

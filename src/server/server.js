@@ -3,7 +3,7 @@ const {config} = require('../configs/config');
 const {app} = require('../../index');
 const {conn} = require('../database/index');
  
-
+ 
 
 
 conn.sync({ force: false }).then(() => {  // force: false es para que no borre la base de datos

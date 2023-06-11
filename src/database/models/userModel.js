@@ -1,5 +1,11 @@
 const { DataTypes } = require("sequelize");
 
+const UserRole = {
+  USER: "user",
+  ADMIN: "admin",
+  SUPERADMIN: "superadmin",
+};
+
 module.exports = (sequelize) => {
   return sequelize.define("User", {
     id: {
@@ -16,9 +22,9 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     role: {
-      type: DataTypes.ENUM("user", "admin", "superadmin"),
+      type: DataTypes.ENUM(...Object.values(UserRole)),
       allowNull: false,
-      defaultValue: "user",
+      defaultValue: UserRole.USER,
     },
     password: {
       type: DataTypes.STRING,
@@ -84,3 +90,4 @@ module.exports = (sequelize) => {
     paranoid: true,
   });
 };
+ 

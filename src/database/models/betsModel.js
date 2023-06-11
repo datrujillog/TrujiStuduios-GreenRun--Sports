@@ -1,16 +1,16 @@
 const { DataTypes } = require("sequelize");
-
+ 
 const BetStatus = {
     PENDING: "pending",
     WON: "won",
     LOST: "lost",
 };
-
+ 
 const BetResult = {
     WON: "won",
     LOST: "lost",
-};
-
+}; 
+ 
 module.exports = (sequelize) => {
     return sequelize.define("Bets", {
         id: {

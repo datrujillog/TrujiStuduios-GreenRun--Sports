@@ -45,11 +45,30 @@ function AuthRouter(app) {
     router.post('/signup', async (req, res) => {
         const { body } = req;
         const result = await authServ.signup(body);
-        res.status(201).json({
-            error: false,
-            message: httpStatusCodes[201],
+        if (result) {
+            return res.status(201).json({
+                error: false,
+                message: httpStatusCodes[201],
+                data: result
+            });
+        }
+        return res.status(400).json({
+            error: true,
+            message: httpStatusCodes[400],
             data: result
         });
+
+    
+
+
+
+
+
+        // res.status(201).json({
+        //     error: false,
+        //     message: httpStatusCodes[201],
+        //     data: result
+        // });
 
     });
 }

@@ -1,65 +1,70 @@
 
-const {User} = require('../database/index');
+const { User } = require('../database/index');
+const BaseService = require('./baseService');
 
-class UserService{
+class UserService extends BaseService {
 
-    async getByEmail(username) {
+    constructor() {
+        super(User);
+    }
+    
+
+    async getAll() {
         try {
-            const user = await User.findOne({where: {username, deleted: false}});
-            return user;
-        } catch (error) {
-            console.log(error);
-            return error;
-        }
-    }
-   
-
-    async getAll(){
-        try{
-            const count = await User.count();
-            if(count === 0){
-                return {
-                    count,
-                    messge: "No hay usuarios"
-                }
-            }
-            //listar solo los usuarios que no esten borrados
-            const users = await User.findAll({where: {deleted: false}});
-                   
+          const count = await User.count();
+          if (count === 0) {
             return {
-                count,
-                users
-            }
-        }catch(err){
-            throw err;
+              count,
+              message: "No hay usuarios"
+            };
+          }
+      
+          const fields = { deleted: false };
+          const exclude = null;
+      
+          const { count: usersCount, entities: users } = await this.findAllByFieldsAndExclude(fields, exclude);
+      
+          return {
+            count: usersCount,
+            users
+          };
+        } catch (error) {
+          throw error;
         }
-    }
+      }
+      
+      
 
-    async getById(id){
-        try{
+
+
+
+
+    async getById(id) {
+        try {
             const user = await User.findByPk(id);
             return {
                 user
             }
-        }catch(err){
+        } catch (err) {
             throw err;
         }
     }
 
-    async create(data){
-        try{
+    async create(data) {
+        try {
             const user = await User.create(data);
+            // console.log(user);
             return {
                 created: true,
                 data: user
             }
-        }catch(err){
+        } catch (err) {
             throw err;
         }
     }
 
-    async update(id, data){
-        try{
+    async update(id, data) {
+        try {
             const user = await User.update(data, {
                 where: {
                     id
@@ -69,33 +74,33 @@ class UserService{
                 updated: true,
                 data: user
             }
-        }catch(err){
+        } catch (err) {
             throw err;
         }
     }
 
     //borrar el usuario por id pero no lo borra de la base de datos con el campo deleted 
-    async delete(id){
-        try{
+    async delete(id) {
+        try {
             const user = await User.findByPk(id);
-            if(user){
+            if (user) {
                 user.deleted = true;
-                await user.save(); 
+                await user.save();
                 return {
                     deleted: true,
                     data: user
                 }
-            }else{
+            } else {
                 throw new Error('User not found');
             }
 
 
-               
-        }catch(err){
+
+        } catch (err) {
             throw err;
         }
     }
-    
+
 
     // async delete(id){
     //     try{
@@ -113,8 +118,16 @@ class UserService{
     //     }
     // }
 
-    
+
 
 }
 
 module.exports = UserService;
+
+
+
+
+
+
+
+  

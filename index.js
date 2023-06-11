@@ -2,6 +2,8 @@ const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
 const createError = require('http-errors');
+// const cookie = require('cookie-parser');
+
 
 
 const { config } = require('./src/configs/config');
@@ -22,6 +24,9 @@ const auth = require('./src/routes/authRoute');
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// app.use(cookie());
+
 // app.use(cors({
 //     origin:["http://localhost:3000","http://127.0.0.1:5500"],
 //     credentials:true

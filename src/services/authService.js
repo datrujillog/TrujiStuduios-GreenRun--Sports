@@ -5,7 +5,25 @@ const UserService = require('./userService');
 
 const { jwtSecret } = require('../configs/config').config;
 
+
+
 class AuthServices {
+
+    async login(data) {
+        const { username,email, password } = data
+
+        const userServ = new UserService()
+        const user = await userServ.getByEmail(username)
+
+        if (user && await this.#compare(password, user.password)){
+            return this.#getUserData(user)
+        }
+
+        return {
+            success: false,
+            errors: ['Las credenciales son incorrectas']
+        }
+    }
 
     async signup(data) {
         if (data && data.password) { // si existe data y data.password entonces encriptar
@@ -15,7 +33,7 @@ class AuthServices {
 
         const UserServ = new UserService();
 
-        const user = await UserServ.create(data); 
+        const user = await UserServ.create(data);
         if (!user.created) {
             return {
                 created: false,
@@ -35,7 +53,6 @@ class AuthServices {
     }
 
     #getUserData(user) {
-        console.log(user.firstName);
         const userData = {
             id: user.id,
             firstName: user.firstName,
@@ -57,7 +74,7 @@ class AuthServices {
         return {
             success: true,
             token,
-            user:userData,
+            user: userData,
         };
 
 
@@ -67,11 +84,18 @@ class AuthServices {
         const token = jwt.sign(payload, jwtSecret, {
             expiresIn: '5d'
         })
-        
+
         return token
     }
 
-
+    async #compare(string, hash) {
+        try {
+            const result = await bcrypt.compare(string, hash)
+            return result
+        } catch (error) {
+            return false
+        }
+    }
 
     async #encrypt(string) {
         try {

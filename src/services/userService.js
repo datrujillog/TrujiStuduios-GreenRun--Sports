@@ -3,9 +3,19 @@ const {User} = require('../database/index');
 
 class UserService{
 
+    async getByEmail(username) {
+        try {
+            const user = await User.findOne({where: {username, deleted: false}});
+            return user;
+        } catch (error) {
+            console.log(error);
+            return error;
+        }
+    }
+   
+
     async getAll(){
         try{
-            // console.log("getAll");
             const count = await User.count();
             if(count === 0){
                 return {

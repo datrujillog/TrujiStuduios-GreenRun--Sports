@@ -10,6 +10,21 @@ function usersRouter(app) {
 
     app.use('/api/v1/users', router);
 
+    // Depositar dinero en su cuenta (crear la transacción correspondiente)
+    router.post('/deposit', async (req, res) => {
+        const {amount, userId} = req.body;
+        const result = await userServ.deposit(amount, userId); // {success: true, message: 'Deposito realizado con exito'}
+        res.json(result);
+    });
+    // Retirar dinero de su cuenta (crear la transacción correspondiente)
+
+
+
+
+
+
+    // ************************************************************
+
     
 
     router.get('/',async (req, res) => {

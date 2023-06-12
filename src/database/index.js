@@ -45,6 +45,17 @@ Bets.hasMany(UserBets, {foreignKey: 'betId', sourceKey: 'id'});
 UserBets.belongsTo(Bets, {foreignKey: 'betId', sourceKey: 'id'});
 
 
+// relacion de la tabla Transaction y UserBets 1:0  de una transaccion a Cero UserBets
+Transaction.hasMany(UserBets, {foreignKey: 'transactionId', sourceKey: 'id'}); // seria de 1 a 0
+UserBets.belongsTo(Transaction, {foreignKey: 'transactionId', sourceKey: 'id'}); // seria de 0 a 1
+
+
+
+
+
+// Transaction.hasOne(UserBets, {foreignKey: 'transactionId', sourceKey: 'id'}); // seria de 1 a 0
+// UserBets.belongsTo(Transaction, {foreignKey: 'transactionId', sourceKey: 'id'}); // seria de 0 a 1
+
 
 module.exports = {
     conn: sequelize,

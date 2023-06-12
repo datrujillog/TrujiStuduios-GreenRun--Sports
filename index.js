@@ -18,6 +18,7 @@ require('colors');
 // importamos las rutas
 const Users = require('./src/routes/userRoute');
 const auth = require('./src/routes/authRoute');
+const transacción = require('./src/routes/transactionRoute');
 
 
 //Utilizamos Middlewares
@@ -36,6 +37,7 @@ app.use(express.urlencoded({ extended: true }));
 // Utilizamos las rutas
 Users(app);
 auth(app);
+transacción(app);
 
 // catch 404 and forward to error handler
 // es para que cuando no encuentre la ruta mande un error

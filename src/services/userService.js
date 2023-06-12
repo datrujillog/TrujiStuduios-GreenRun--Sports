@@ -1,6 +1,7 @@
+const BaseService = require('./baseService');
 
 const { User } = require('../database/index');
-const BaseService = require('./baseService');
+const { Transaction } = require('../database/index');
 
 class UserService extends BaseService {
 
@@ -9,7 +10,7 @@ class UserService extends BaseService {
     }
     
 
-    async getAll() {
+    async getAll() { 
         try {
           const count = await User.count();
           if (count === 0) {
@@ -32,6 +33,8 @@ class UserService extends BaseService {
           throw error;
         }
       }
+
+    
       
       
 
@@ -39,29 +42,9 @@ class UserService extends BaseService {
 
 
 
-    async getById(id) {
-        try {
-            const user = await User.findByPk(id);
-            return {
-                user
-            }
-        } catch (err) {
-            throw err;
-        }
-    }
 
-    async create(data) {
-        try {
-            const user = await User.create(data);
-            // console.log(user);
-            return {
-                created: true,
-                data: user
-            }
-        } catch (err) {
-            throw err;
-        }
-    }
+      //////////////////////////////////////
+
 
     async update(id, data) {
         try {

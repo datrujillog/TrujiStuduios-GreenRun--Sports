@@ -23,11 +23,11 @@ module.exports = (sequelize) => {
       // }
     },
     amount: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER, //4000 + 
       allowNull: false,
     },
     category: {
-      type: DataTypes.ENUM("deposit", "withdraw", "bet", "winning"),
+      type: DataTypes.ENUM("deposit", "withdraw", "bet", "winning"),  //total:5000 + 20% 5200
       allowNull: false,
       defaultValue: "deposit",
     },

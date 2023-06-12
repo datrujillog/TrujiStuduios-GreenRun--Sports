@@ -16,36 +16,21 @@ class AuthServices {
         this.userServ = new UserService();
     }
 
-    // async login(data) {
-    //     const { email, password } = data
-
-    //     const user = await await this.userServ.findOneByField('email', email)
-
-
-    //     if (user.entity && await this.#compare(password, user.entity.password)) {
-    //         return this.#getUserData(user.entity)
-    //     }
-
-    //     return {
-    //         success: false,
-    //         errors: ['Las credenciales son incorrectas']
-    //     }
-    // }
-
 
     async login(data) {
         const { email, password } = data;
-        
+
         const { entity } = await this.userServ.findOneByField('email', email);
         const credentialsMatch = entity && await this.#compare(password, entity.password);
 
         return credentialsMatch
             ? this.#getUserData(entity)
             : {
-                success: false,
+                successfully: false,
                 errors: ['Las credenciales son incorrectas']
             };
     }
+
 
     async signup(data) {
         const validRoles = ['user', 'admin', 'superadmin'];
@@ -69,13 +54,12 @@ class AuthServices {
         };
     }
 
-
-
     #getUserData(user) {
         const userData = {
             id: user.id,
             firstName: user.firstName,
             lastName: user.lastName,
+            password: user.password,
             role: user.role,
             phone: user.phone,
             email: user.email,
@@ -95,8 +79,6 @@ class AuthServices {
             token,
             user: userData,
         };
-
-
     }
 
     #createToken(payload) {

@@ -45,12 +45,7 @@ class transactionService extends BaseService {
             // userId = '236ec7f2-9255-47ff-8d9d-1ff59f5fbf6e'
             const user = await User.findOne({ where: { id: userId } }); // buscamos el usuario por id
             if (!user) return { message: ` El usuario con el Id ${userId} no existe` };
-
-            console.log(userId);
-            console.log(user.id);
-            // que el userId sea igual al userId de la tabla de transacciones
-            // const userBet = await UserBets.findOne({ where: { userId: userId } }); 
-
+            
             const newBalance = user.balance + amount;
 
             await User.update({ balance: newBalance }, { where: { id: userId } });

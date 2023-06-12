@@ -1,8 +1,10 @@
 'use strict';
+
 const express = require('express');
 
 
 const UserServices = require('../services/userService');
+const authMiddleware = require('../middlewares/authValidation');
 
 function usersRouter(app) {
     const router = express.Router();
@@ -10,16 +12,17 @@ function usersRouter(app) {
 
     app.use('/api/v1/users', router);
 
-    app.put('/:id', async (req, res) => {
+    
+
+    router.patch('/update/:id', authMiddleware('user'), async (req, res) => {
         const { id } = req.params;
-        const { data,userId } = req.body;
-        console.log('data',data);
-        console.log('userId',userId);
-        // const result = await userServ.update(id, data);
-        res.json(result);
+        const data = req.body;
+        const result = await userServ.userUpdate(id, data);
+        res.status(200).json(result);
     });
 
 
+    
 
 
 
@@ -29,17 +32,12 @@ function usersRouter(app) {
 
     
 
-    router.get('/',async (req, res) => {
+    router.get('/',authMiddleware('user'), async (req, res) => {
         const users =  await userServ.getAll();
         res.json(users);       
     });
 
     
-    router.put('/:id', (req, res) => {
-        const {id} = req.params;
-        const result = userServ.delete(id);
-        res.json(result);
-    });
     
 }
 

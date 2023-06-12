@@ -34,6 +34,24 @@ class UserService extends BaseService {
         }
       }
 
+
+      async update(id, data) {
+        try {
+            const user = await User.findByPk(id); // buscamos el usuario por id
+            if (user) {
+                const updatedUser = await user.update(data); 
+                return {
+                    updated: true,
+                    data: updatedUser
+                }
+            } else {
+                throw new Error('User not found');
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+
     
       
       
@@ -46,21 +64,7 @@ class UserService extends BaseService {
       //////////////////////////////////////
 
 
-    async update(id, data) {
-        try {
-            const user = await User.update(data, {
-                where: {
-                    id
-                }
-            });
-            return {
-                updated: true,
-                data: user
-            }
-        } catch (err) {
-            throw err;
-        }
-    }
+    
 
     //borrar el usuario por id pero no lo borra de la base de datos con el campo deleted 
     async delete(id) {

@@ -22,6 +22,13 @@ function transactionRouter(app) {
         const result = await transactionServ.deposit(userId, amount); 
         res.status(200).json(result);
     });
+
+    // Retirar dinero (crear la transacción correspondiente)
+    router.patch('/withdraw', authMiddleware('user'), async (req, res) => {
+        const { amount, userId } = req.body;
+        const result = await transactionServ.withdraw(userId, amount); 
+        res.status(200).json(result);
+    });
 }
 
 module.exports = transactionRouter;

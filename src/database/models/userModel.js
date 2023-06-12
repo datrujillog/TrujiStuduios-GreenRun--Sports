@@ -21,6 +21,11 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    balance: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      defaultValue: 0,
+    },
     role: {
       type: DataTypes.ENUM(...Object.values(UserRole)),
       allowNull: false,

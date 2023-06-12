@@ -6,7 +6,7 @@ const {conn} = require('../database/index');
  
 
 
-conn.sync({ force: true }).then(() => {  // force: false es para que no borre la base de datos
+conn.sync({ force: false }).then(() => {  // force: false es para que no borre la base de datos
     console.log("")
     console.log("")
     console.log("Base de datos conectada".bgGreen);

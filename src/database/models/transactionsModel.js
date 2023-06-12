@@ -17,6 +17,7 @@ module.exports = (sequelize) => {
     userId: {
       type: DataTypes.UUID,
       allowNull: false,
+      field: 'userId',
       // references: {
       //   model: 'users',
       //   key: 'id'
@@ -29,7 +30,9 @@ module.exports = (sequelize) => {
     category: {
       type: DataTypes.ENUM("deposit", "withdraw", "bet", "winning"),  //total:5000 + 20% 5200
       allowNull: false,
+      field: 'category',
       defaultValue: "deposit",
+
     },
     status: {
       type: DataTypes.STRING,
@@ -39,26 +42,28 @@ module.exports = (sequelize) => {
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
-      field: 'created_at',
+      field: 'createdAt',
     },
     updatedAt: {
       type: DataTypes.DATE,
       allowNull: false,
-      field: 'updated_at',
+      field: 'updatedAt',
     },
     deletedAt: {
       type: DataTypes.DATE,
       allowNull: true,
-      field: 'deleted_at',
+      field: 'deletedAt',
     },
     deleted: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
+      field: 'deleted',
       defaultValue: false,
     },
     userBetId: {
       type: DataTypes.UUID,
       allowNull: true,
+      field: 'userBetId',
       // references: {
       //   model: 'user_bets',
       //   key: 'id'

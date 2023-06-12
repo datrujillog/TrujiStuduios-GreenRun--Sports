@@ -11,11 +11,16 @@ function transactionRouter(app) {
 
     app.use('/api/v1/transactions', router);
 
+    router.get('/', async (req, res) => {
+        const result = await transactionServ.getAll();
+        res.status(200).json(result);
+    });
+
     // Depositar dinero en su cuenta (crear la transacción correspondiente)
     router.patch('/deposit', authMiddleware('user'), async (req, res) => {
         const { amount, userId } = req.body;
-        console.log(userId);
-        const result = await transactionServ.deposit(userIdm, amount); 
+        const result = await transactionServ.deposit(userId, amount); 
+        res.status(200).json(result);
     });
 }
 

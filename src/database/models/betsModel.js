@@ -1,9 +1,9 @@
 const { DataTypes } = require("sequelize");
  
 const BetStatus = {
-    PENDING: "pending",
-    WON: "won",
-    LOST: "lost",
+    PENDING: "active",
+    WON: "cancelled",
+    LOST: "settled",
 };
  
 const BetResult = {

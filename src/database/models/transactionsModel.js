@@ -1,11 +1,12 @@
 const { DataTypes } = require("sequelize");
 
-// const TransactionCategory = {
-//   DEPOSIT: "deposit",
-//   WITHDRAW: "withdraw",
-//   BET: "bet",
-//   WINNING: "winning",
-// };
+const TransactionCategory = {
+  DEPOSIT: "deposit",
+  WITHDRAW: "withdraw",
+  BET: "bet",
+  WINNING: "winning",
+  TRANSFER: "transfer",
+};
 
 module.exports = (sequelize) => {
   return sequelize.define("Transaction", {
@@ -24,35 +25,20 @@ module.exports = (sequelize) => {
       // }
     },
     amount: {
-      type: DataTypes.INTEGER, //4000 + 
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     category: {
-      type: DataTypes.ENUM("deposit", "withdraw", "bet", "winning"),  //total:5000 + 20% 5200
+      type: DataTypes.ENUM(Object.values(TransactionCategory)),
       allowNull: false,
       field: 'category',
-      defaultValue: "deposit",
+      defaultValue: TransactionCategory.DEPOSIT,
 
     },
     status: {
       type: DataTypes.STRING,
       allowNull: false,
       field: 'status',
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      field: 'createdAt',
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      field: 'updatedAt',
-    },
-    deletedAt: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      field: 'deletedAt',
     },
     deleted: {
       type: DataTypes.BOOLEAN,
@@ -68,6 +54,11 @@ module.exports = (sequelize) => {
       //   model: 'user_bets',
       //   key: 'id'
       // }
+    },
+    userAssociatedId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      field: 'User Associated',
     },
   }, {
     timestamps: true,

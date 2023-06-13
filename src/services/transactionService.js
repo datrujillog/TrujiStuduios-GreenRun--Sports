@@ -45,7 +45,7 @@ class transactionService extends BaseService {
             // userId = '236ec7f2-9255-47ff-8d9d-1ff59f5fbf6e'
             const user = await User.findOne({ where: { id: userId } }); // buscamos el usuario por id
             if (!user) return { message: ` El usuario con el Id ${userId} no existe` };
-            
+
             const newBalance = user.balance + amount;
 
             await User.update({ balance: newBalance }, { where: { id: userId } });
@@ -99,6 +99,16 @@ class transactionService extends BaseService {
             message: `Se ha retirado $ ${amount} de la cuenta del usuario ${user.firstName}, ${user.lastName}`,
         }
 
+    }
+
+    // esta funcion es para obtener las transacciones del usuario por id 
+    // Obtener sus transacciones (se pueden filtrar por tipo de depósito, retiro, apuesta,
+    // ganador) y por fechas (desde y hasta).
+
+    async getTransactions(userId, type, from, to) {
+        return {
+            message: `Se obtuvieron las transacciones del usuario con el id ${userId}`,
+        }
     }
 
 }

@@ -19,14 +19,23 @@ function transactionRouter(app) {
     // Depositar dinero en su cuenta (crear la transacción correspondiente)
     router.patch('/deposit', authMiddleware('user'), async (req, res) => {
         const { amount, userId } = req.body;
-        const result = await transactionServ.deposit(userId, amount); 
+        const result = await transactionServ.deposit(userId, amount);
         res.status(200).json(result);
     });
 
     // Retirar dinero (crear la transacción correspondiente)
     router.patch('/withdraw', authMiddleware('user'), async (req, res) => {
         const { amount, userId } = req.body;
-        const result = await transactionServ.withdraw(userId, amount); 
+        const result = await transactionServ.withdraw(userId, amount);
+        res.status(200).json(result);
+    });
+
+    // Obtener sus transacciones (se pueden filtrar por tipo de depósito, retiro, apuesta,
+    // ganador) y por fechas (desde y hasta).
+    router.get('/getOne/:id', authMiddleware('user'), async (req, res) => {
+        const { id } = req.params;
+        const { type, from, to } = req.query;
+        const result = await transactionServ.getTransactions(id, type, from, to);
         res.status(200).json(result);
     });
 }

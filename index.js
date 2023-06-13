@@ -2,6 +2,10 @@ const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
 const createError = require('http-errors');
+const swaggerUi = require('swagger-ui-express');
+
+// const { swaggerDocs: V1SwaggerDocs } = require("./src/libs/swagger/swagger")
+
 // const cookie = require('cookie-parser');
 
 
@@ -39,11 +43,14 @@ Users(app);
 auth(app);
 transacción(app);
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(require('./src/libs/swagger/swagger.json')));
+
+
 // catch 404 and forward to error handler
 // es para que cuando no encuentre la ruta mande un error
 app.use(function (req, res, next) {
     next(createError(404));
-}); 
+});
 
 // error handler
 app.use(function (err, req, res, next) {
@@ -54,7 +61,6 @@ app.use(function (err, req, res, next) {
     // Send error response
     res.status(err.status || 500).json({ error: err.message });
 });
-
 
 
 

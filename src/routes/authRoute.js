@@ -17,14 +17,14 @@ function AuthRouter(app) {
 
     app.use('/api/v1/auth', router);
 
-    router.get("/validate", authMiddleware('user'), (req, res) => {
+    router.get("/validate", (req, res) => {
         return res.json({
             success: true,
             user: req.user
         })
     })
 
-    router.post('/login', async (req, res) => {
+    router.post('/login', authMiddleware('user'), async (req, res) => {
         const result = await authServ.login(req.body);
         if (result.success) {
             return res.status(200).json({
@@ -74,3 +74,110 @@ function AuthRouter(app) {
 }
 
 module.exports = AuthRouter;
+
+
+
+
+// {
+//     "components": {
+//       "schemas": {
+//         "signup": {
+//           "type": "object",
+//           "properties": {
+//             "firstName": {
+//               "type": "string"
+//             },
+//             "lastName": {
+//               "type": "string"
+//             },
+//             "role": {
+//               "type": "string"
+//             },
+//             "password": {
+//               "type": "string"
+//             },
+//             "phone": {
+//               "type": "string"
+//             },
+//             "email": {
+//               "type": "string",
+//               "format": "email"
+//             },
+//             "username": {
+//               "type": "string"
+//             },
+//             "address": {
+//               "type": "string"
+//             },
+//             "gender": {
+//               "type": "string"
+//             },
+//             "birthDate": {
+//               "type": "string",
+//               "format": "date"
+//             },
+//             "countryId": {
+//               "type": "integer"
+//             },
+//             "city": {
+//               "type": "string"
+//             },
+//             "category": {
+//               "type": "string"
+//             },
+//             "documentId": {
+//               "type": "integer"
+//             }
+//           },
+//           "required": [
+//             "firstName",
+//             "lastName",
+//             "role",
+//             "password",
+//             "phone",
+//             "email",
+//             "username",
+//             "address",
+//             "gender",
+//             "birthDate",
+//             "countryId",
+//             "city",
+//             "category",
+//             "documentId"
+//           ]
+//         }
+//       }
+//     },
+//     "paths": {
+//       "/api/v1/auth/signup": {
+//         "post": {
+//           "summary": "Registro de usuario",
+//           "tags": [
+//             "Auth"
+//           ],
+//           "description": "Registro de usuario",
+//           "requestBody": {
+//             "content": {
+//               "application/json": {
+//                 "schema": {
+//                   "$ref": "#/components/schemas/signup"
+//                 }
+//               }
+//             }
+//           },
+//           "responses": {
+//             "200": {
+//               "description": "Usuario registrado correctamente"
+//             },
+//             "400": {
+//               "description": "Error en los datos enviados"
+//             },
+//             "500": {
+//               "description": "Error en el servidor"
+//             }
+//           }
+//         }
+//       }
+//     }
+//   }
+  

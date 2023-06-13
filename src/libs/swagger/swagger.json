@@ -1,0 +1,200 @@
+   {
+      "openapi": "3.0.0",
+      "info": {
+        "title": "API de Ejemplo",
+        "description": "Descripción de la API de Ejemplo",
+        "version": "1.0.0"
+      },
+      "servers": [
+        {
+          "url": "http://localhost:5000"
+        }
+      ],
+
+     
+
+
+      "tags": [
+        {
+          "name": "Auth",
+          "description": "Endpoints de autenticación"
+        }
+      ],
+
+      "paths": {
+        "/api/v1/auth/signup": {
+          "post": {
+            "summary": "Registro de usuario",
+            "tags": ["Auth"],
+            "description": "Registro de usuario",
+            "requestBody": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/signup"
+                  }
+                }
+              }
+            },
+            "responses": {
+              "200": {
+                "description": "Usuario registrado correctamente"
+              },
+              "400": {
+                "description": "Error en los datos enviados"
+              },
+              "500": {
+                "description": "Error en el servidor"
+              }
+            }
+          }
+        },
+
+        "/api/v1/auth/login": {
+          "post": {
+            "summary": "Inicio de sesión",
+            "tags": ["Auth"],
+            "description": "Inicio de sesión",
+            "requestBody": {
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/login"
+                  }
+                }
+              }
+            },
+            "responses": {
+              "200": {
+                "description": "Inicio de sesión correcto"
+              },
+              "400": {
+                "description": "Error en los datos enviados"
+              },
+              "500": {
+                "description": "Error en el servidor"
+              }
+            }
+          }
+        }
+      },
+      "components": {
+        "schemas": {
+          "signup": {
+            "type": "object",
+            "properties": {
+              "firstName": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 20,
+                "example": "Juan"
+              },
+              "lastName": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 20,
+                "example": "Perez"
+              },
+              "role": {
+                "type": "string",
+                "enum": ["user", "admin"]
+              },
+              "password": {
+                "type": "string",
+                "minLength": 8,
+                "maxLength": 20,
+                "example": "123456"
+              },
+              "phone": {
+                "type": "string",
+                "minLength": 8,
+                "maxLength": 20,
+                "example": "12345678"                
+              },
+              "email": {
+                "type": "string",
+                "format": "email"
+              },
+              "username": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 10,
+                "example": "juanperez"
+              },
+              "address": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 20,
+                "example": "Calle 123"
+              },
+              "gender": {
+                "type": "string",
+                "example": "Men"
+              },
+              "birthDate": {
+                "type": "string",
+                "format": "date"
+              },
+              "countryId": {
+                "type": "integer",
+                "example": 1
+              },
+              "city": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 20,
+                "example": "Medeiin"
+              },
+              "category": {
+                "type": "string",
+                "example": "A"
+              },
+              "documentId": {
+                "type": "integer",
+                "example": 123456789
+              }
+            },
+            "required": [
+              "firstName",
+              "lastName",
+              "role",
+              "password",
+              "phone",
+              "email",
+              "username",
+              "address",
+              "gender",
+              "birthDate",
+              "countryId",
+              "city",
+              "category",
+              "documentId"
+            ]
+          },
+          "login":{
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "format": "email"               
+              },
+              "password": {
+                "type": "string",
+                "minLength": 8,
+                "maxLength": 20,
+                "example": "123456"
+              }
+            },
+            "required": [
+              "email",
+              "password"
+            ]
+          }
+        }
+      }
+    }
+    
+    
+   
+
+  

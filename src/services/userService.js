@@ -2,6 +2,8 @@ const BaseService = require('./baseService');
 
 const { User } = require('../database/index');
 const { Transaction } = require('../database/index');
+const hasPermission = require('../helpers/hasPermission');
+const { httpStatusCodes } = require('../helpers/httpStatusCodes');
 
 class UserService extends BaseService {
 
@@ -58,6 +60,68 @@ class UserService extends BaseService {
             throw error;
         }
     }
+
+    async userOne(userId, id) {
+        try {
+
+            await hasPermission(userId, id);
+
+            const user = await User.findOne({ where: { id } });
+            if (!user) return { message: ` El usuario con el Id ${id} no existe` };
+
+            return {
+                user
+            };
+
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
+
+    //Hacer una apuesta en un evento específico
+    async userBet(id, userId, body) {
+        try {
+            const user = await User.findOne({ where: { id: userId } });
+            if (!user) return { message: ` El usuario con el Id ${userId} no existe` };
+
+            const transaction = await Transaction.findOne({ where: { id } });
+
+            const { amount } = body;
+
+            if (transaction) {
+                const newAmount = transaction.amount + amount;
+                const transactionUpdate = await Transaction.update(
+                    { amount: newAmount },
+                    { where: { id } }
+                );
+                return {
+                    update: true,
+                    message: `La transacción con el id ${id} se actualizó correctamente`,
+                    data: transactionUpdate
+                };
+            }
+
+            const transactionCreate = await Transaction.create(
+                { amount, userId },
+                { where: { id } }
+            );
+
+            return {
+                create: true,
+                message: `La transacción con el id ${id} se creó correctamente`,
+                data: transactionCreate
+            };
+            
+
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
+
 
 
 

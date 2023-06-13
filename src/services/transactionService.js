@@ -1,14 +1,20 @@
+'use strict'
+
 const { User } = require('../database/index');
 const { Transaction } = require('../database/index');
 const { UserBets } = require('../database/index');
 const { Bets } = require('../database/index');
 
 const BaseService = require('./baseService');
+const UserService = require('./userService');
 
 
 class transactionService extends BaseService {
     constructor() {
         super(Transaction);
+        
+        const userServ = new UserService();
+        this.userServ = userServ;
     }
 
     async getAll() {
@@ -101,6 +107,31 @@ class transactionService extends BaseService {
 
     }
 
+
+    async getBalance(userId, id) {
+        try {
+            await this.userServ.userOne(userId, id);
+
+            const deposit = await Transaction.sum('amount', { where: { userId: id, category: 'Deposit' } });   // suma de los depositos 
+            const withdraw = await Transaction.sum('amount', { where: { userId: id, category: 'Withdraw' } }); // suma de los retiros
+            const bet = await Transaction.sum('amount', { where: { userId: id, category: 'Bet' } });            // suma de las apuestas
+            const winning = await Transaction.sum('amount', { where: { userId: id, category: 'Winning' } });    // suma de las ganancias
+
+            const balance = (deposit + winning) - (withdraw + bet);
+
+            return {
+                userId: id,
+                balance: balance,
+                status: "200",
+                message: "OK"
+            }
+
+        } catch (error) {
+            throw error;
+        }
+
+    }
+
     // esta funcion es para obtener las transacciones del usuario por id 
     // Obtener sus transacciones (se pueden filtrar por tipo de depósito, retiro, apuesta,
     // ganador) y por fechas (desde y hasta).
@@ -110,6 +141,7 @@ class transactionService extends BaseService {
             message: `Se obtuvieron las transacciones del usuario con el id ${userId}`,
         }
     }
+
 
 }
 

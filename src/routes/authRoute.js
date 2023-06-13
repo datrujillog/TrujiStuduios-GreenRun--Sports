@@ -24,7 +24,7 @@ function AuthRouter(app) {
         })
     })
 
-    router.post('/login', authMiddleware('user'), async (req, res) => {
+    router.post('/login',async (req, res) => {
         const result = await authServ.login(req.body);
         if (result.success) {
             return res.status(200).json({

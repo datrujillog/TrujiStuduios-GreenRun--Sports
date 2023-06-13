@@ -23,6 +23,7 @@ require('colors');
 const Users = require('./src/routes/userRoute');
 const auth = require('./src/routes/authRoute');
 const transacción = require('./src/routes/transactionRoute');
+const bets = require('./src/routes/betsRoute');
 
 
 //Utilizamos Middlewares
@@ -42,6 +43,7 @@ app.use(express.urlencoded({ extended: true }));
 Users(app);
 auth(app);
 transacción(app);
+bets(app);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(require('./src/libs/swagger/swagger.json')));
 

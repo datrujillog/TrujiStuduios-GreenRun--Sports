@@ -3,12 +3,13 @@
 const express = require('express');
 
 const AuthServices = require('../services/authService');
-// const { authResponse } = require('../helpers/authResponse');
 
 const authMiddleware = require('../middlewares/authValidation');
 
 const { httpStatusCodes } = require('../helpers/httpStatusCodes');
+const { validarRegistro } = require('../middlewares/validateMiddleware');
 
+const { body } = require('express-validator');
 
 
 function AuthRouter(app) {
@@ -24,7 +25,7 @@ function AuthRouter(app) {
         })
     })
 
-    router.post('/login',async (req, res) => {
+    router.post('/login', async (req, res) => {
         const result = await authServ.login(req.body);
         if (result.success) {
             return res.status(200).json({
@@ -42,8 +43,13 @@ function AuthRouter(app) {
 
     });
 
-    router.post('/signup', async (req, res) => {
+    // como agrego el middleware de validaciones aca? dame un ejemplo porfa 
+
+
+    router.post('/signup', validarRegistro(), async (req, res) => {
+
         const { body } = req;
+
         const result = await authServ.signup(body);
         if (result) {
             return res.status(201).json({
@@ -58,7 +64,7 @@ function AuthRouter(app) {
             data: result
         });
 
-    
+
 
 
 
@@ -180,4 +186,3 @@ module.exports = AuthRouter;
 //       }
 //     }
 //   }
-  

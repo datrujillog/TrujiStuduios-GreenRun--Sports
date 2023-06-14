@@ -1,4 +1,5 @@
 'use strict'
+const { Op } = require("sequelize");
 
 const { User } = require('../database/index');
 const { Transaction } = require('../database/index');
@@ -20,8 +21,8 @@ class transactionService extends BaseService {
     async getAll() {
         try {
             const transactions = await this.get();
-            const users = await User.findAll(); //
-            console.log(users);
+            const users = await User.findAll(); 
+            console.log(users);Withdraw
 
             return {
                 count: transactions.entities.length,
@@ -85,7 +86,7 @@ class transactionService extends BaseService {
 
         if (user.balance < amount) return { message: ` El usuario  " ${user.username} "  Nombre completo " ${user.firstName} ${user.lastName} " no tiene suficiente dinero en su cuenta` };
 
-        const newBalance = user.balance - amount;
+        const newBalance = user.balance - amount;Withdraw
 
         await User.update({ balance: newBalance }, { where: { id: userId } });
 
@@ -108,41 +109,100 @@ class transactionService extends BaseService {
     }
 
 
-    async getBalance(userId, id) {
+    async getTransactions(userId, id, type) {
+        await this.userServ.userOne(userId, id);
+      
+        const whereClause = {
+          userId: id,
+          category: type || { [Op.ne]: null }, // Filtrar por categoría si se proporciona, de lo contrario, incluir todas las categorías
+        };
+      
+        const transactions = await Transaction.findAll({
+          where: whereClause,
+        });
+      
+        const formattedTransactions = transactions.map((transaction) => ({
+          id: transaction.id,
+          amount: transaction.amount,
+          userId: transaction.userId,
+          userBetId: transaction.userBetId,
+          category: transaction.category,
+          status: transaction.status,
+          createdAt: transaction.createdAt,
+          updatedAt: transaction.updatedAt,
+        }));
+      
+        return {
+          count: formattedTransactions.length,
+          transactions: formattedTransactions,
+        };
+      }
+      
+
+
+
+
+
+
+   
+
+
+
+
+    async getTransactions(userId, id,type) { 
         try {
             await this.userServ.userOne(userId, id);
-
-            const deposit = await Transaction.sum('amount', { where: { userId: id, category: 'Deposit' } });   // suma de los depositos 
-            const withdraw = await Transaction.sum('amount', { where: { userId: id, category: 'Withdraw' } }); // suma de los retiros
-            const bet = await Transaction.sum('amount', { where: { userId: id, category: 'Bet' } });            // suma de las apuestas
-            const winning = await Transaction.sum('amount', { where: { userId: id, category: 'Winning' } });    // suma de las ganancias
-
-            const balance = (deposit + winning) - (withdraw + bet);
-
-            return {
+    
+            const whereClause = {
                 userId: id,
-                balance: balance,
-                status: "200",
-                message: "OK"
+            };
+    
+            if (type) {
+                whereClause.category = type;
             }
-
+    
+            const transactions = await Transaction.findAll({
+                where: whereClause,
+            });
+    
+            return {
+                count: transactions.length,
+                transactions: transactions.map((transaction) => {
+                    return {
+                        id: transaction.id,
+                        amount: transaction.amount,
+                        userId: transaction.userId,
+                        userBetId: transaction.userBetId,
+                        category: transaction.category,
+                        status: transaction.status,
+                        createdAt: transaction.createdAt,
+                        updatedAt: transaction.updatedAt,
+                    }
+                }),
+            };
         } catch (error) {
             throw error;
         }
-
     }
-
-    // esta funcion es para obtener las transacciones del usuario por id 
-    // Obtener sus transacciones (se pueden filtrar por tipo de depósito, retiro, apuesta,
-    // ganador) y por fechas (desde y hasta).
-
-    async getTransactions(userId, type, from, to) {
-        return {
-            message: `Se obtuvieron las transacciones del usuario con el id ${userId}`,
-        }
-    }
-
+    
 
 }
 
 module.exports = transactionService;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

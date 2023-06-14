@@ -51,25 +51,25 @@ function transactionRouter(app) {
                 message: error.message
             });
 
-            // return res.status(500).json({ error: 'Error en el servidor' });
         }
     });
 
 
+    router.get('/filtros/:id', authMiddleware('user'), async (req, res) => {
+        try {
+            const { id } = req.user;
+            const { id: userId } = req.params;
+            const { type } = req.query;
 
-
-
-
-
-
-    // Obtener sus transacciones (se pueden filtrar por tipo de depósito, retiro, apuesta,
-    // ganador) y por fechas (desde y hasta).
-    router.get('/getOne/:id', authMiddleware('user'), async (req, res) => {
-        const { id: userId } = req.params;
-        const { type, from, to } = req.query;
-
-        const result = await transactionServ.getTransactions(userid, type, from, to);
-        res.status(200).json(result);
+            const result = await transactionServ.getTransactions(userId, id, type);
+            res.status(200).json(result);
+        } catch (error) {
+            console.error(error);
+            res.status(400).json({
+                status: httpStatusCodes[400],
+                message: error.message
+            });
+        }
     });
 
 

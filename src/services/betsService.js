@@ -17,7 +17,7 @@ class betsService extends BaseService {
 
     }
 
-    async getAllBets() {
+    async getAllBet() {
         try {
             const bets = await this.model.findAll();
             return bets;    

@@ -33,14 +33,14 @@ class AuthServices {
 
 
     async signup(data) {
-        const validRoles = ['user', 'admin', 'superadmin'];
+        // const validRoles = ['user', 'admin', 'superadmin'];
 
-        if (!validRoles.includes(data.role)) {
-            return {
-                created: false,
-                error: `Valor no válido para el campo "role". Los valores válidos son: ${validRoles.join(', ')}.`,
-            };
-        }
+        // if (!validRoles.includes(data.role)) {
+        //     return {
+        //         created: false,
+        //         error: `Valor no válido para el campo "role". Los valores válidos son: ${validRoles.join(', ')}.`,
+        //     };
+        // }
 
         if (data.password) {
             data.password = await this.#encrypt(data.password);

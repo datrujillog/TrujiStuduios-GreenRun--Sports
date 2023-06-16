@@ -86,7 +86,7 @@ class transactionService extends BaseService {
 
         if (user.balance < amount) return { message: ` El usuario  " ${user.username} "  Nombre completo " ${user.firstName} ${user.lastName} " no tiene suficiente dinero en su cuenta` };
 
-        const newBalance = user.balance - amount;Withdraw
+        const newBalance = user.balance - amount;//withdraw
 
         await User.update({ balance: newBalance }, { where: { id: userId } });
 
@@ -104,6 +104,30 @@ class transactionService extends BaseService {
             status: "200",
             amount: newWithdraw.amount,
             message: `Se ha retirado $ ${amount} de la cuenta del usuario ${user.firstName}, ${user.lastName}`,
+        }
+
+    }
+
+    async getBalance(userId, id) {
+        try {
+            //await this.userServ.userOne(userId, id);
+
+            const deposit = await Transaction.sum('amount', { where: { userId: id, category: 'Deposit' } });   // suma de los depositos 
+            const withdraw = await Transaction.sum('amount', { where: { userId: id, category: 'Withdraw' } }); // suma de los retiros
+            const bet = await Transaction.sum('amount', { where: { userId: id, category: 'Bet' } });            // suma de las apuestas
+            const winning = await Transaction.sum('amount', { where: { userId: id, category: 'Winning' } });    // suma de las ganancias
+
+            const balance = (deposit + winning) - (withdraw + bet);
+
+            return {
+                userId: id,
+                balance: balance,
+                status: "200",
+                message: "OK"
+            }
+
+        } catch (error) {
+            throw error;
         }
 
     }

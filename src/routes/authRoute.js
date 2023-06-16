@@ -43,10 +43,9 @@ function AuthRouter(app) {
 
     });
 
-    // como agrego el middleware de validaciones aca? dame un ejemplo porfa 
 
 
-    router.post('/signup', validarRegistro(), async (req, res) => {
+    router.post('/signup', async (req, res) => {
 
         const { body } = req;
 
@@ -65,17 +64,6 @@ function AuthRouter(app) {
         });
 
 
-
-
-
-
-
-        // res.status(201).json({
-        //     error: false,
-        //     message: httpStatusCodes[201],
-        //     data: result
-        // });
-
     });
 }
 
@@ -83,106 +71,3 @@ module.exports = AuthRouter;
 
 
 
-
-// {
-//     "components": {
-//       "schemas": {
-//         "signup": {
-//           "type": "object",
-//           "properties": {
-//             "firstName": {
-//               "type": "string"
-//             },
-//             "lastName": {
-//               "type": "string"
-//             },
-//             "role": {
-//               "type": "string"
-//             },
-//             "password": {
-//               "type": "string"
-//             },
-//             "phone": {
-//               "type": "string"
-//             },
-//             "email": {
-//               "type": "string",
-//               "format": "email"
-//             },
-//             "username": {
-//               "type": "string"
-//             },
-//             "address": {
-//               "type": "string"
-//             },
-//             "gender": {
-//               "type": "string"
-//             },
-//             "birthDate": {
-//               "type": "string",
-//               "format": "date"
-//             },
-//             "countryId": {
-//               "type": "integer"
-//             },
-//             "city": {
-//               "type": "string"
-//             },
-//             "category": {
-//               "type": "string"
-//             },
-//             "documentId": {
-//               "type": "integer"
-//             }
-//           },
-//           "required": [
-//             "firstName",
-//             "lastName",
-//             "role",
-//             "password",
-//             "phone",
-//             "email",
-//             "username",
-//             "address",
-//             "gender",
-//             "birthDate",
-//             "countryId",
-//             "city",
-//             "category",
-//             "documentId"
-//           ]
-//         }
-//       }
-//     },
-//     "paths": {
-//       "/api/v1/auth/signup": {
-//         "post": {
-//           "summary": "Registro de usuario",
-//           "tags": [
-//             "Auth"
-//           ],
-//           "description": "Registro de usuario",
-//           "requestBody": {
-//             "content": {
-//               "application/json": {
-//                 "schema": {
-//                   "$ref": "#/components/schemas/signup"
-//                 }
-//               }
-//             }
-//           },
-//           "responses": {
-//             "200": {
-//               "description": "Usuario registrado correctamente"
-//             },
-//             "400": {
-//               "description": "Error en los datos enviados"
-//             },
-//             "500": {
-//               "description": "Error en el servidor"
-//             }
-//           }
-//         }
-//       }
-//     }
-//   }

@@ -4,11 +4,6 @@ const path = require('path');
 const createError = require('http-errors');
 const swaggerUi = require('swagger-ui-express');
 
-// const { swaggerDocs: V1SwaggerDocs } = require("./src/libs/swagger/swagger")
-
-// const cookie = require('cookie-parser');
-
-
 
 const { config } = require('./src/configs/config');
 
@@ -56,17 +51,12 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
-    // Set locals
+// Set locals
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-    // Send error response
-    res.status(err.status || 500).json({ error: err.message });
+
 });
-
-
-
-
 
 module.exports = { app };
 

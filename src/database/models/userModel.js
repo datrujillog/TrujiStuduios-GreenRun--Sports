@@ -28,16 +28,16 @@ module.exports = (sequelize) => {
     },
     role: {
       type: DataTypes.ENUM(...Object.values(UserRole)),
-      allowNull: false,
+      allowNull: true,
       defaultValue: UserRole.USER,
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false, 
     },
     phone: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     email: {
       type: DataTypes.STRING,
@@ -46,12 +46,12 @@ module.exports = (sequelize) => {
     },
     username: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
       unique: true,
     },
     address: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     gender: {
       type: DataTypes.STRING,

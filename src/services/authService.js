@@ -17,49 +17,47 @@ class AuthServices {
     }
 
 
+    /**
+     * Authenticates a user with the provided email and password.
+     * @param {Object} data - The user data to be authenticated.
+     * @param {string} data.email - The email of the user to be authenticated.
+     * @param {string} data.password - The password of the user to be authenticated.
+     * @returns {Object} An object containing either the authenticated user data and a success message, or an error message.
+     * @throws {Error} Throws an error if the provided credentials are incorrect.
+     */
     async login(data) {
         const { email, password } = data;
-
-        const { entity } = await this.userServ.findOneByField('email', email);
+        const { entity } = await this.userServ.getByEmail(email);
         const credentialsMatch = entity && await this.#compare(password, entity.password);
-
-        return credentialsMatch
-            ? this.#getUserData(entity)
-            : {
-                successfully: false,
-                errors: ['Las credenciales son incorrectas']
-            };
+        if (!credentialsMatch) throw new Error(`El password no coincide con el email ${email}`);
+        return this.#getUserData(entity);
     }
 
 
+    /**
+     * Creates a new user account with the provided data.
+     * If a password is provided, it will be encrypted before being stored.
+     * @param {Object} data - The user data to be stored.
+     * @returns {Object} An object containing either the newly created user data and a success message, or an error message.
+     */
     async signup(data) {
-        // const validRoles = ['user', 'admin', 'superadmin'];
-
-        // if (!validRoles.includes(data.role)) {
-        //     return {
-        //         created: false,
-        //         error: `Valor no válido para el campo "role". Los valores válidos son: ${validRoles.join(', ')}.`,
-        //     };
-        // }
-
         if (data.password) {
             data.password = await this.#encrypt(data.password);
         }
-
         const { created, error, data: userData } = await new UserService().create(data);
-
         return {
             created,
             ...(created ? { data: this.#getUserData(userData) } : { error }),
         };
     }
 
+
+
     #getUserData(user) {
         const userData = {
             id: user.id,
             firstName: user.firstName,
             lastName: user.lastName,
-            password: user.password,
             role: user.role,
             phone: user.phone,
             email: user.email,

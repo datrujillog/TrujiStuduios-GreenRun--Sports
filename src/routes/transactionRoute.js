@@ -9,6 +9,7 @@ const authMiddleware = require('../middlewares/authValidation');
 const hasPermission = require('../helpers/hasPermission');
 
 const { httpStatusCodes } = require('../helpers/httpStatusCodes');
+const { errorResponse } = require('../helpers/authResponse');
 
 
 
@@ -23,52 +24,49 @@ function transactionRouter(app) {
         res.status(200).json(result);
     });
 
-    // Depositar dinero en su cuenta (crear la transacción correspondiente)
     router.patch('/deposit', authMiddleware('user'), async (req, res) => {
-        const { amount, userId } = req.body;
-        const result = await transactionServ.deposit(userId, amount);
-        res.status(200).json(result);
+        try {
+            const { amount, userId } = req.body;
+            const { id } = req.user;
+            const result = await transactionServ.deposit(userId, id, amount);
+            return res.status(200).json({ message: 'Deposit successfully', result });
+        } catch (error) {
+            return errorResponse(res, error, 404);
+        }
     });
 
-    // Retirar dinero (crear la transacción correspondiente)
+
     router.patch('/withdraw', authMiddleware('user'), async (req, res) => {
-        const { amount, userId } = req.body;
-        const result = await transactionServ.withdraw(userId, amount);
-        res.status(200).json(result);
+        try {
+            const { amount, userId } = req.body;
+            const { id } = req.user;
+            const result = await transactionServ.withdraw(userId, id, amount);
+            return res.status(200).json({ result });
+        } catch (error) {
+            return errorResponse(res, error, 404);
+        }
     });
 
     router.get('/balance/:id', authMiddleware('user'), async (req, res) => {
         try {
             const { id: userId } = req.user;
             const { id: requestedId } = req.params;
-
             const balance = await transactionServ.getBalance(userId, requestedId);
             return res.status(200).json(balance);
         } catch (error) {
-            console.error(error);
-            res.status(400).json({
-                status: httpStatusCodes[400],
-                message: error.message
-            });
-
+            return errorResponse(res, error, 404);
         }
     });
 
-
-    router.get('/filtros/:id', authMiddleware('user'), async (req, res) => {
+    router.get('/filters/:id', authMiddleware('user'), async (req, res) => {
         try {
             const { id } = req.user;
             const { id: userId } = req.params;
             const { type } = req.query;
-
             const result = await transactionServ.getTransactions(userId, id, type);
-            res.status(200).json(result);
+            return res.status(200).json({ result });
         } catch (error) {
-            console.error(error);
-            res.status(400).json({
-                status: httpStatusCodes[400],
-                message: error.message
-            });
+            return errorResponse(res, error, 404);
         }
     });
 

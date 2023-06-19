@@ -1,18 +1,23 @@
 
+
+
+
 /**
- * Verifica si el usuario tiene permisos para acceder a un recurso
- * @param {string} userId Id del usuario que realiza la petición
- * @param {string} requestedId Id del usuario que se quiere consultar
- * @returns {Promise} Promesa con el resultado de la verificación
- * @throws {Error} Error original si falla la promesa
- * @throws {Error} Error de permisos si el usuario no tiene permisos
- * @example
-**/
-
-
+ * Checks if a user has permission to access another user's data.
+ * @param {string} userId - The ID of the user making the request.
+ * @param {string} requestedId - The ID of the user whose data is being requested.
+ * @returns {Promise<void>} - A Promise that resolves if the user has permission, or rejects with an error if not.
+ */
 async function hasPermission(userId, requestedId) {
-  if (userId !== requestedId) {
-    return Promise.reject(new Error('No tiene permisos para acceder a este recurso'));
+  try {
+
+    if (userId !== requestedId) {
+      return Promise.reject(new Error(`User ${userId} does not have permission to access user ${requestedId}`));
+    }
+    return Promise.resolve();
+
+  } catch (error) {
+    return Promise.reject(error);
   }
 }
 

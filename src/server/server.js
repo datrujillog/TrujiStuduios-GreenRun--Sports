@@ -22,5 +22,5 @@ conn.sync({ force: false }).then(() => {  // force: false es para que no borre l
     });
 }); 
 
-
+ 
 

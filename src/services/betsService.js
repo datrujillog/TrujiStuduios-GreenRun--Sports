@@ -17,19 +17,11 @@ class betsService extends BaseService {
 
     }
 
-    async getAllBet() {
-        try {
-            const bets = await this.model.findAll();
-            return bets;    
-        } catch (error) {
-            throw error;
-        }
-    }
 
-    
+
     async userBet(body) {
         try {
-
+            console.log(body);
             // crear la apuesta
             const bet = await this.create(body);
 
@@ -38,17 +30,6 @@ class betsService extends BaseService {
                 message: 'Bet created',
                 data: bet
             }
-            
-
-            
-
-
-
-
-
-
-
-
 
 
         } catch (error) {

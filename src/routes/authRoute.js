@@ -10,6 +10,8 @@ const { httpStatusCodes } = require('../helpers/httpStatusCodes');
 const { validarRegistro } = require('../middlewares/validateMiddleware');
 
 const { body } = require('express-validator');
+const { authResponse, loginResponse,errorResponse } = require('../helpers/authResponse');
+
 
 
 function AuthRouter(app) {
@@ -18,52 +20,22 @@ function AuthRouter(app) {
 
     app.use('/api/v1/auth', router);
 
-    router.get("/validate", (req, res) => {
-        return res.json({
-            success: true,
-            user: req.user
-        })
-    })
 
     router.post('/login', async (req, res) => {
-        const result = await authServ.login(req.body);
-        if (result.success) {
-            return res.status(200).json({
-                error: false,
-                message: httpStatusCodes[200],
-                data: result
-            });
+        try {
+            const result = await authServ.login(req.body);
+            return result.success ? loginResponse(res, result, 200) : errorResponse(res, result, 400);
+        } catch (error) {
+            return errorResponse(res, error, 404);           
         }
-        return res.status(401).json({
-            error: true,
-            message: httpStatusCodes[401],
-            data: result
-
-        });
-
     });
 
 
 
-    router.post('/signup', async (req, res) => {
-
+    router.post('/signup', validarRegistro(), async (req, res) => {
         const { body } = req;
-
         const result = await authServ.signup(body);
-        if (result) {
-            return res.status(201).json({
-                error: false,
-                message: httpStatusCodes[201],
-                data: result
-            });
-        }
-        return res.status(400).json({
-            error: true,
-            message: httpStatusCodes[400],
-            data: result
-        });
-
-
+        return result ? authResponse(res, result, 201) : authResponse(res, result, 400);
     });
 }
 

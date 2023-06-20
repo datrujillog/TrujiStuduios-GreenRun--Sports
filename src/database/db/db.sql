@@ -1,9 +1,8 @@
-// buscarlos campos deleted de la base de datos user
-SELECT * FROM user WHERE deleted = 0; 
+SELECT * FROM Transactions
+INNER JOIN UserBets ON Transactions.id = UserBets.id;
 
-// que solamente me muestre los campos de firstname y lastname
-SELECT firstname, lastname FROM user WHERE deleted = 0;
-
-
-// listar las dos tablas de transacciones y User conun iner join
-SELECT * FROM transaction INNER JOIN user ON transaction.user_id = user.id;
+SELECT * FROM Transactions; 
+SELECT * FROM UserBets;
+```
+-- necesito insertar datos ala tabla UserBets
+INSERT INTO UserBets (id, UserId,betId, amount,state) VALUES (1,1,1,1000,1);

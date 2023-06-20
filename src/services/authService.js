@@ -16,15 +16,6 @@ class AuthServices {
         this.userServ = new UserService();
     }
 
-
-    /**
-     * Authenticates a user with the provided email and password.
-     * @param {Object} data - The user data to be authenticated.
-     * @param {string} data.email - The email of the user to be authenticated.
-     * @param {string} data.password - The password of the user to be authenticated.
-     * @returns {Object} An object containing either the authenticated user data and a success message, or an error message.
-     * @throws {Error} Throws an error if the provided credentials are incorrect.
-     */
     async login(data) {
         const { email, password } = data;
         const { entity } = await this.userServ.getByEmail(email);
@@ -34,12 +25,6 @@ class AuthServices {
     }
 
 
-    /**
-     * Creates a new user account with the provided data.
-     * If a password is provided, it will be encrypted before being stored.
-     * @param {Object} data - The user data to be stored.
-     * @returns {Object} An object containing either the newly created user data and a success message, or an error message.
-     */
     async signup(data) {
         if (data.password) {
             data.password = await this.#encrypt(data.password);

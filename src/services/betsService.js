@@ -17,11 +17,19 @@ class betsService extends BaseService {
 
     }
 
+    async betsOne(id) {
+        const Bets = await this.getById( id );
+        if (!Bets) {
+            throw new NotFoundException('not found');
+        }
+        return Bets;
+    }
+
 
 
     async userBet(body) {
         try {
-            console.log(body);
+            console.log('boby <> ', body);
             // crear la apuesta
             const bet = await this.create(body);
 

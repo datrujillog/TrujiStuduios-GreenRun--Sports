@@ -46,7 +46,7 @@ module.exports = (sequelize) => {
         result: {
             type: DataTypes.ENUM(...Object.values(BetResult)),
             allowNull: true,
-            defaultValue: BetResult.LOST
+            // defaultValue: BetResult.LOST
         },
     }, {
         timestamps: true,

@@ -27,7 +27,49 @@ class betsService extends BaseService {
         }
     }
 
-// ******************************************************************************************
+    async getBestByFilters(userId,idUser,sport,eventId) {
+        try {
+            await this.userServ.userOne(userId, idUser);
+
+            const whereClause = {
+                sport: sport || { [Op.ne]: null },
+                eventId: eventId || { [Op.ne]: null },
+            }
+            const bets = await BetsModel.findAll({
+                where: whereClause,
+            });
+
+            const formattedBets = bets.map((bet) => ({
+                id: bet.id,
+                betOption: bet.betOption,
+                sport: bet.sport,
+                status: bet.status,
+                name: bet.name,
+                eventId: bet.eventId,
+                add: bet.add,
+                result: bet.result,
+                createdAt: bet.createdAt,
+                updatedAt: bet.updatedAt,
+            }));
+
+            return {
+                count: formattedBets.length,
+                bets: formattedBets,
+            };
+        } catch (error) {
+            console.log(error);
+            throw new Error(`${error.message}`);
+        }
+    }
+
+
+
+
+
+
+
+
+    // ******************************************************************************************
     async userBet(body) {
         try {
             // crear la apuesta

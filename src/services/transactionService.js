@@ -5,7 +5,7 @@ const { Op } = require("sequelize");
 const BaseService = require('./baseService');
 const UserService = require('./userService');
 
-const { Transaction } = require('../database/index');
+const { Transaction, User } = require('../database/index');
 
 
 
@@ -14,7 +14,7 @@ class transactionService extends BaseService {
         super(Transaction);
         this.userServ = new UserService();
     }
-  
+
     async deposit(userId, id, amount) {
         const { results: user } = await this.userServ.userOne(userId, id);
         const newBalance = user.balance + amount;
@@ -81,29 +81,39 @@ class transactionService extends BaseService {
         }
     }
 
-
-    async getTransactions(userId, id, type) {
-        await this.userServ.userOne(userId, id);
+    //! hay que organizar que filtre por el username
+    //Amin
+    async getTransactionsByAmin(idUser, id, category, userId) {
+        const { results: user } = await this.userServ.userOne(idUser, id);
 
         const whereClause = {
-            userId: id,
-            category: type || { [Op.ne]: null }, // Filtrar por categoría si se proporciona, de lo contrario, incluir todas las categorías
+            category: category || { [Op.ne]: null },
+            userId: userId || { [Op.ne]: null },
         };
+
+        if (userId) {
+            whereClause.userId = userId;
+        }
 
         const transactions = await Transaction.findAll({
             where: whereClause,
         });
 
-        const formattedTransactions = transactions.map((transaction) => ({
-            id: transaction.id,
-            amount: transaction.amount,
-            userId: transaction.userId,
-            userBetId: transaction.userBetId,
-            category: transaction.category,
-            status: transaction.status,
-            createdAt: transaction.createdAt,
-            updatedAt: transaction.updatedAt,
-        }));
+        const formattedTransactions = [];
+        for (const transaction of transactions) {
+            const user = await User.findOne({ where: { id: transaction.userId } });
+            const formattedTransaction = {
+                id: transaction.id,
+                amount: transaction.amount,
+                userBetId: transaction.userBetId,
+                category: transaction.category,
+                status: transaction.status,
+                createdAt: transaction.createdAt,
+                updatedAt: transaction.updatedAt,
+                userId: user,
+            };
+            formattedTransactions.push(formattedTransaction);
+        }
 
         return {
             count: formattedTransactions.length,
@@ -111,59 +121,44 @@ class transactionService extends BaseService {
         };
     }
 
+    //User
+    async getTransactionsByUser(idUser, id, category, userId) {
 
+        const { results: user } = await this.userServ.userOne(idUser, id);
+
+        const whereClause = {
+            category: category || { [Op.ne]: null },
+            userId: idUser
+        };
+
+        const transactions = await Transaction.findAll({
+            where: whereClause
+        });
+
+        const formattedTransactions = [];
+
+        for (const transaction of transactions) {
+            const user = await this.userServ.userOne(idUser, transaction.userId);
+            const formattedTransaction = {
+                id: transaction.id,
+                amount: transaction.amount,
+                userBetId: transaction.userBetId,
+                category: transaction.category,
+                status: transaction.status,
+                createdAt: transaction.createdAt,
+                updatedAt: transaction.updatedAt,
+                userId: user,
+            };
+            formattedTransactions.push(formattedTransaction);
+        }
+
+        return {
+            count: formattedTransactions.length,
+            transactions: formattedTransactions,
+        }
+    }
 }
 
 module.exports = transactionService;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// async getTransactions(userId, id, type) {
-//     try {
-//         await this.userServ.userOne(userId, id);
-
-//         const whereClause = {
-//             userId: id,
-//         };
-
-//         if (type) {
-//             whereClause.category = type;
-//         }
-
-//         const transactions = await Transaction.findAll({
-//             where: whereClause,
-//         });
-
-//         return {
-//             count: transactions.length,
-//             transactions: transactions.map((transaction) => {
-//                 return {
-//                     id: transaction.id,
-//                     amount: transaction.amount,
-//                     userId: transaction.userId,
-//                     userBetId: transaction.userBetId,
-//                     category: transaction.category,
-//                     status: transaction.status,
-//                     createdAt: transaction.createdAt,
-//                     updatedAt: transaction.updatedAt,
-//                 }
-//             }),
-//         };
-//     } catch (error) {
-//         throw error;
-//     }
-// }
 
 

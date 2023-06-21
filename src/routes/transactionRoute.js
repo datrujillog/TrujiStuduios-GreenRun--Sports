@@ -24,7 +24,7 @@ function transactionRouter(app) {
         res.status(200).json(result);
     });
 
-    router.patch('/deposit', authMiddleware('user'), async (req, res) => {
+    router.patch('/deposit', authMiddleware('adminUser'), async (req, res) => {
         try {
             const { amount, userId } = req.body;
             const { id } = req.user;
@@ -36,7 +36,7 @@ function transactionRouter(app) {
     });
 
 
-    router.patch('/withdraw', authMiddleware('user'), async (req, res) => {
+    router.patch('/withdraw', authMiddleware('adminUser'), async (req, res) => {
         try {
             const { amount, userId } = req.body;
             const { id } = req.user;
@@ -58,17 +58,6 @@ function transactionRouter(app) {
         }
     });
 
-    router.get('/filters/:id', authMiddleware('user'), async (req, res) => {
-        try {
-            const { id } = req.user;
-            const { id: userId } = req.params;
-            const { type } = req.query;
-            const result = await transactionServ.getTransactions(userId, id, type);
-            return res.status(200).json({ result });
-        } catch (error) {
-            return errorResponse(res, error, 404);
-        }
-    });
 
 
 }

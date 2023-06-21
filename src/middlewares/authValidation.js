@@ -50,13 +50,32 @@ function userValidation(req, res, next) {
     });
 }
 
+//hacer funcion para que tenga permisos de admin y user
+function adminUserValidation(req, res, next) {
+    if (req.user.role === "admin" || req.user.role === "user") {
+        return next();
+    }
+
+    return res.status(401).json({
+        error: true,
+        message: "Insufficient permissions",
+    });
+}
+
+
+
 function authMiddleware(type) {
     let middlewares;
     if (type === "user") {
         middlewares = [authValidation, userValidation];
     } else if (type === "admin") {
         middlewares = [authValidation, adminValidation];
-    }
+    }else if (type === "adminUser") {
+        middlewares = [authValidation, adminUserValidation];
+    } 
+    // else {
+    //     middlewares = [authValidation];
+    // }
 
     return middlewares;
 }

@@ -5,11 +5,11 @@ const { Op } = require("sequelize");
 const BaseService = require('./baseService');
 const UserService = require('./userService');
 const betsService = require('./betsService');
+
 const transactionService = require('./transactionService');
 
 const { UserBets, Transaction } = require('../database/index');
 
-const hasPermission = require('../helpers/hasPermission');
 
 
 class betsUserService extends BaseService {

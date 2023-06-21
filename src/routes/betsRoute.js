@@ -13,34 +13,7 @@ function betsRouter(app) {
     app.use('/api/v1/bets', router);
 
 
-    // Hacer una apuesta en un evento específico
-    // router.post('/', authMiddleware('user'), async (req, res) => {
-    //     try {
-    //         const { id: userId } = req.user;
-    //         const { id } = req.params;
-    //         const body = req.body;
-    //         const result = await betsServ.createUserBet(id, userId, body);
-    //         res.status(200).json({ data: result });
-
-    //     } catch (error) {
-    //         res.status(400).json({ message: error.message });
-    //     }
-    // });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
 
 
     router.post('/create', authMiddleware('user'), async (req, res) => {

@@ -5,7 +5,6 @@ const express = require('express');
 
 const UserServices = require('../services/userService');
 const authMiddleware = require('../middlewares/authValidation');
-const hasPermission = require('../helpers/hasPermission');
 const { authResponse, loginResponse, errorResponse } = require('../helpers/authResponse');
 const { validateUpdateUser } = require('../middlewares/validateMiddleware');
 

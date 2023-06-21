@@ -1,21 +1,18 @@
 'use strict'
-const { Op } = require("sequelize");
 
-const { User } = require('../database/index');
-const { Transaction } = require('../database/index');
-const { UserBets } = require('../database/index');
-const { Bets } = require('../database/index');
+const { Op } = require("sequelize");
 
 const BaseService = require('./baseService');
 const UserService = require('./userService');
+
+const { Transaction } = require('../database/index');
+
 
 
 class transactionService extends BaseService {
     constructor() {
         super(Transaction);
         this.userServ = new UserService();
-
-
     }
   
     async deposit(userId, id, amount) {

@@ -1,35 +1,35 @@
-const { User } = require('../database/index');
-const { Bets } = require('../database/index');
-const { UserBets } = require('../database/index');
-const { Transaction } = require('../database/index');
+const { Op } = require("sequelize");
+
 const BaseService = require('./baseService');
 const UserService = require('./userService');
 
-const { Op } = require("sequelize");
-
+const { Bets: BetsModel } = require('../database/index');
 
 
 class betsService extends BaseService {
     constructor() {
-        super(Bets);
-        const userServ = new UserService();
-        this.userServ = userServ;
-
+        super(BetsModel);
+        this.userServ = new UserService();
     }
 
-    async betsOne(id) {
-        const Bets = await this.getById( id );
-        if (!Bets) {
-            throw new NotFoundException('not found');
+
+    async betsOne(userId, idUser, id) {
+        try {
+            await this.userServ.userOne(userId, idUser);
+            const bet = await BetsModel.findByPk(id);
+            if (!bet) {
+                throw new Error(`Bet with Id ${id} does not exist.`);
+            }
+            return { results: bet };
+        } catch (error) {
+            console.log(error);
+            throw new Error(`${error.message}`);
         }
-        return Bets;
     }
 
-
-
+// ******************************************************************************************
     async userBet(body) {
         try {
-            console.log('boby <> ', body);
             // crear la apuesta
             const bet = await this.create(body);
 
@@ -43,14 +43,6 @@ class betsService extends BaseService {
         } catch (error) {
             throw error;
         }
-
-        //dame una muestra que es lo que le envio por el body de postman
-
-
-
-
-
-
 
     }
 

@@ -1,4 +1,8 @@
-// crear una clase base para los servicios get, getById, create, update, delete y que hereden de esta clase
+
+
+
+
+
 class BaseService {
     constructor(model) {
         this.model = model;
@@ -134,7 +138,7 @@ class BaseService {
             throw err;
         }
     }
-       
+
     async findOneByFieldsAndExclude(fields, exclude) {
         try {
             const entity = await this.model.findOne({ where: fields, exclude });

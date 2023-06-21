@@ -19,7 +19,7 @@ module.exports = (sequelize) => {
             primaryKey: true,
         },
         betOption: {
-            type: DataTypes.STRING,
+            type: DataTypes.JSON,
             allowNull: false,
         },
         sport: {

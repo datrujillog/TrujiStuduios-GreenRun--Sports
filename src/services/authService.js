@@ -3,10 +3,7 @@ const jwt = require('jsonwebtoken')
 
 const UserService = require('./userService');
 
-const BaseService = require('./baseService');
-
 const { jwtSecret } = require('../configs/config').config;
-const { User } = require('../database/index');
 
 
 

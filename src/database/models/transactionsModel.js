@@ -25,7 +25,7 @@ module.exports = (sequelize) => {
       // }
     },
     amount: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
       allowNull: false,
     },
     category: {

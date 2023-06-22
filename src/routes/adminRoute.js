@@ -21,19 +21,7 @@ function adminRouter(app) {
 
     app.use('/api/v1/admin', router);
 
-
-    router.get('/transactios/filters/:id', authMiddleware('admin'), async (req, res) => {
-        try {
-            const { id } = req.user;
-            const { id: idUser } = req.params;
-            const { category, userId } = req.query;
-            const result = await transactionServ.getTransactionsByAmin(idUser, id, category, userId);
-            return res.status(200).json({ result });
-        } catch (error) {
-            return errorResponse(res, error, 404);
-        }
-    });
-
+    // filter por sport y event
     router.get('/bets/filters/:id', authMiddleware('admin'), async (req, res) => {
         try {
             const { id: userId } = req.user;
@@ -47,8 +35,35 @@ function adminRouter(app) {
     });
 
 
+    //filters user category
+    router.get('/transactios/filters/:id', authMiddleware('admin'), async (req, res) => {
+        try {
+            const { id } = req.user;
+            const { id: idUser } = req.params;
+            const { category, userId } = req.query;
+            const result = await transactionServ.getTransactionsByAmin(idUser, id, category, userId);
+            return res.status(200).json({ result });
+        } catch (error) {
+            return errorResponse(res, error, 404);
+        }
+    });
 
-    
+    //Solicitar saldo de usuario
+    router.get('/balance-user/:id', authMiddleware('admin'), async (req, res) => {
+        try {
+            const { id: idUser } = req.user;
+            const { id: userId } = req.params;
+            const balance = await transactionServ.getBalanceUsserAdmin(userId, idUser);
+            return res.status(200).json(balance);
+        } catch (error) {
+            return errorResponse(res, error, 404);
+        }
+    });
+
+
+
+
+
     // ***********************************************************************************************
 
     router.post('/create', authMiddleware('admin'), async (req, res) => {

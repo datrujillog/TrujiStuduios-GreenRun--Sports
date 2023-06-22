@@ -139,7 +139,7 @@ class transactionService extends BaseService {
 
         for (const transaction of transactions) {
             const user = await this.userServ.userOne(idUser, transaction.userId);
-            const formattedTransaction = {
+            const formattedTransaction = { 
                 id: transaction.id,
                 amount: transaction.amount,
                 userBetId: transaction.userBetId,
@@ -150,11 +150,23 @@ class transactionService extends BaseService {
                 userId: user,
             };
             formattedTransactions.push(formattedTransaction);
+            console.log(formattedTransactions);
         }
 
         return {
             count: formattedTransactions.length,
             transactions: formattedTransactions,
+        }
+    }
+
+    //solicitar saoldo de un usuario
+    async getBalanceUsserAdmin(userId, idUser) {
+        console.log(userId);
+        console.log(idUser);
+
+        return {
+            userId,
+            idUser,
         }
     }
 }

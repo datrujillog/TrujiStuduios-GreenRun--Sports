@@ -4,9 +4,6 @@ const express = require('express');
 
 const AuthServices = require('../services/authService');
 
-const authMiddleware = require('../middlewares/authValidation');
-
-const { httpStatusCodes } = require('../helpers/httpStatusCodes');
 const { validarRegistro } = require('../middlewares/validateMiddleware');
 
 const { body } = require('express-validator');
@@ -29,8 +26,6 @@ function AuthRouter(app) {
             return errorResponse(res, error, 404);           
         }
     });
-
-
 
     router.post('/signup', validarRegistro(), async (req, res) => {
         const { body } = req;

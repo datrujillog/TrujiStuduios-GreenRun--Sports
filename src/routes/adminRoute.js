@@ -40,8 +40,8 @@ function adminRouter(app) {
         try {
             const { id } = req.user;
             const { id: idUser } = req.params;
-            const { category, userId } = req.query;
-            const result = await transactionServ.getTransactionsByAmin(idUser, id, category, userId);
+            const { category, userId,username } = req.query;
+            const result = await transactionServ.getTransactionsByAmin(idUser, id,category,username, userId);
             return res.status(200).json({ result });
         } catch (error) {
             return errorResponse(res, error, 404);

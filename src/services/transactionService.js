@@ -81,9 +81,9 @@ class transactionService extends BaseService {
         }
     }
 
-    //! hay que organizar que filtre por el username
+
     //Amin
-    async getTransactionsByAmin(idUser, id, category, userId) {
+    async getTransactionsByAmin(idUser, id, category, username, userId) {
         const { results: user } = await this.userServ.userOne(idUser, id);
 
         const whereClause = {
@@ -95,9 +95,16 @@ class transactionService extends BaseService {
             whereClause.userId = userId;
         }
 
+        if (username) {
+            const user = await User.findOne({ where: { username } });
+            whereClause.userId = user.id;
+        }
+
+
         const transactions = await Transaction.findAll({
             where: whereClause,
         });
+
 
         const formattedTransactions = [];
         for (const transaction of transactions) {
@@ -139,7 +146,7 @@ class transactionService extends BaseService {
 
         for (const transaction of transactions) {
             const user = await this.userServ.userOne(idUser, transaction.userId);
-            const formattedTransaction = { 
+            const formattedTransaction = {
                 id: transaction.id,
                 amount: transaction.amount,
                 userBetId: transaction.userBetId,

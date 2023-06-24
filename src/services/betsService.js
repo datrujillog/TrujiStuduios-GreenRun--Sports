@@ -27,7 +27,7 @@ class betsService extends BaseService {
         }
     }
 
-    async getBestByFilters(userId,idUser,sport,eventId) {
+    async getBestByFilters(userId, idUser, sport, eventId) {
         try {
             await this.userServ.userOne(userId, idUser);
 
@@ -56,6 +56,34 @@ class betsService extends BaseService {
                 count: formattedBets.length,
                 bets: formattedBets,
             };
+        } catch (error) {
+            console.log(error);
+            throw new Error(`${error.message}`);
+        }
+    }
+
+    //! Esta en contruccion 
+    // D ). Cambiar el estado de una apuesta (activa/cancelada)
+    async updateBet(idUser,userId,id, status) {
+        try {
+            await this.userServ.userOne(idUser, userId);
+
+            
+            const updatedBet = await BetsModel.update({ status }, {
+                where: {
+                    id: id
+                }
+            });
+
+            return { results: updatedBet };
+
+
+            // const bet = await BetsModel.findByPk(id);
+            // if (!bet) {
+            //     throw new Error(`Bet with Id ${id} does not exist.`);
+            // }
+            // const updatedBet = await bet.update({ status });
+            // return { results: updatedBet };
         } catch (error) {
             console.log(error);
             throw new Error(`${error.message}`);

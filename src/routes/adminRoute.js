@@ -49,18 +49,34 @@ function adminRouter(app) {
     });
 
     //Solicitar saldo de usuario
-    router.get('/balance-user/:id', authMiddleware('admin'), async (req, res) => {
+    router.post('/balance-user/:id', authMiddleware('admin'), async (req, res) => {
         try {
             const { id: idUser } = req.user;
             const { id: userId } = req.params;
-            const balance = await transactionServ.getBalanceUsserAdmin(userId, idUser);
+            const { username } = req.body;
+            const balance = await transactionServ.getBalanceUserAdmin(userId, idUser,username);
             return res.status(200).json(balance);
         } catch (error) {
             return errorResponse(res, error, 404);
         }
     });
 
+    //! No esta terminada
+    // D ). Cambiar el estado de una apuesta (activa/cancelada)
+    router.put('/bets/status/:id', authMiddleware('admin'), async (req, res) => {
+        try {
+            const { id: idUser } = req.user;
+            const { id } = req.params;
+            const { userId, status } = req.body;
 
+            console.log(idUser, userId, status);
+
+            const result = await betsServ.updateBet(idUser, userId,id, status);
+            return res.status(200).json(result);
+        } catch (error) {
+            return errorResponse(res, error, 404);
+        }
+    });
 
 
 

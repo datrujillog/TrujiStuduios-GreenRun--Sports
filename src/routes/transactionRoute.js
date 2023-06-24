@@ -51,7 +51,7 @@ function transactionRouter(app) {
         try {
             const { id: userId } = req.user;
             const { id: requestedId } = req.params;
-            const balance = await transactionServ.getBalance(userId, requestedId);
+            const balance = await transactionServ.getBalanceUser(userId, requestedId);
             return res.status(200).json(balance);
         } catch (error) {
             return errorResponse(res, error, 404);

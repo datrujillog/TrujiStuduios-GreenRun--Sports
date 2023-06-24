@@ -32,11 +32,10 @@ class betsUserService extends BaseService {
             throw new Error('The bet is not active');
         }
 
-        const balance = await this.transactionServ.getBalance(userId, body.userId);
+        const balance = await this.transactionServ.getBalanceUser(userId, body.userId);
         if (body.amount > balance.balance || body.amount <= 0) {
             throw new Error('You do not have enough credit to bet');
         }
-
         const userBet = await UserBets.create(body);
 
         const newBalance = balance.balance - body.amount;

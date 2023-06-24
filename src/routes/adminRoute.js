@@ -61,17 +61,13 @@ function adminRouter(app) {
         }
     });
 
-    //! No esta terminada
     // D ). Cambiar el estado de una apuesta (activa/cancelada)
     router.put('/bets/status/:id', authMiddleware('admin'), async (req, res) => {
         try {
             const { id: idUser } = req.user;
-            const { id } = req.params;
-            const { userId, status } = req.body;
-
-            console.log(idUser, userId, status);
-
-            const result = await betsServ.updateBet(idUser, userId,id, status);
+            const { id: userId } = req.params;
+            const body = req.body;
+            const result = await betsServ.updateBetAdmin(idUser, userId,body);
             return res.status(200).json(result);
         } catch (error) {
             return errorResponse(res, error, 404);

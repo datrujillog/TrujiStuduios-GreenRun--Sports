@@ -14,44 +14,28 @@ class AdminService extends BaseService {
         this.userServ = new UserService();
         this.baseServ = new BaseService(UserModel);
     }
-
-    // ! En desarrollo
+    // ! Revisar el bloqueo de usuario y el active  
     // E ). Bloquear a un usuario específico (estado de usuario => activo/bloqueado) (no se
     // pueden bloquear otros administradores
     async blockUserAdmin(idUser, userId, body) {
+
         const { username } = body;
-
-        const { results: user } = await this.userServ.userOne(idUser, userId);
-
-        const {results:userExist} = await this.userServ.getByUsername(userId, idUser, username);
-
-        // console.log(userExist.role)
+        await this.userServ.userOne(idUser, userId);
+        const { results: userExist } = await this.userServ.getByUsername(userId, idUser, username);
 
         if (userExist.role === 'admin') throw new Error('You cannot block another admin');
+        if (userExist.id === idUser) throw new Error('You cannot block yourself');
 
-        if (userExist.id === idUser) throw new Error('You cannot block yourself'); // es para que no se bloquee a si mismo
-
-        const updateBlock = await this.baseServ.update(userExist.id, { userState: userExist.userState === 'blocked' ? 'active' : 'blocked' });
+        const updatedUserState = userExist.userState === 'blocked' ? 'active' : 'blocked';
+        const { data } = await this.baseServ.update(userExist.id, { userState: updatedUserState });
 
         return {
-            message: `User ${userExist.username} has been ${userExist.userState === 'blocked' ? 'unblocked' : 'blocked'}`,
-            user: updateBlock
-        }
-
-
-        // return await this.baseServ.update(userExist.id, { state: userExist.state === 'blocked' ? 'active' : 'blocked' });
-
-        // if (userExist.state === 'blocked') {
-        //     userExist.state = 'active';
-        //     await userExist.update({ state: 'active' });
-        //     return userExist;
-        // } else {
-        //     userExist.state = 'blocked';
-        //     await userExist.update({ state: 'blocked' });
-        //     return userExist;
-        // }
-
+            successful: true,
+            message: `User ${userExist.username} has been ${updatedUserState === 'blocked' ? 'unblocked' : 'blocked'}`,
+            user: data
+        };
     }
+
 
 }
 

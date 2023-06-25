@@ -59,6 +59,25 @@ class UserService extends BaseService {
             throw err;
         }
     }
+
+    async getByUsername(userId,idUser,username) {
+        try {
+            await this.userOne(userId, idUser);
+            const results = await this.model.findOne({ where: { username } });
+            if (!results) {
+                throw new Error(`El username ${username} no existe  _-_-_`);
+            }
+            
+            return {
+                successfully: true,
+                count: results.length,
+                results
+            };
+        }
+        catch (err) {
+            throw err;
+        }
+    }
 }
 
 module.exports = UserService;

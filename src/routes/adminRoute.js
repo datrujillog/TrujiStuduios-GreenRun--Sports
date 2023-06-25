@@ -5,6 +5,7 @@ const express = require('express');
 const UserServices = require('../services/userService');
 const transactionService = require('../services/transactionService');
 const betsService = require('../services/betsService');
+const AdminService = require('../services/adminService');
 
 const { validateUpdateUser } = require('../middlewares/validateMiddleware');
 const authMiddleware = require('../middlewares/authValidation');
@@ -17,6 +18,7 @@ function adminRouter(app) {
     const userServ = new UserServices();
     const transactionServ = new transactionService();
     const betsServ = new betsService();
+    const adminServ = new AdminService();
 
 
     app.use('/api/v1/admin', router);
@@ -40,8 +42,8 @@ function adminRouter(app) {
         try {
             const { id } = req.user;
             const { id: idUser } = req.params;
-            const { category, userId,username } = req.query;
-            const result = await transactionServ.getTransactionsByAmin(idUser, id,category,username, userId);
+            const { category, userId, username } = req.query;
+            const result = await transactionServ.getTransactionsByAmin(idUser, id, category, username, userId);
             return res.status(200).json({ result });
         } catch (error) {
             return errorResponse(res, error, 404);
@@ -54,7 +56,7 @@ function adminRouter(app) {
             const { id: idUser } = req.user;
             const { id: userId } = req.params;
             const { username } = req.body;
-            const balance = await transactionServ.getBalanceUserAdmin(userId, idUser,username);
+            const balance = await transactionServ.getBalanceUserAdmin(userId, idUser, username);
             return res.status(200).json(balance);
         } catch (error) {
             return errorResponse(res, error, 404);
@@ -67,7 +69,21 @@ function adminRouter(app) {
             const { id: idUser } = req.user;
             const { id: userId } = req.params;
             const body = req.body;
-            const result = await betsServ.updateBetAdmin(idUser, userId,body);
+            const result = await betsServ.updateBetAdmin(idUser, userId, body);
+            return res.status(200).json(result);
+        } catch (error) {
+            return errorResponse(res, error, 404);
+        }
+    });
+
+    // E ). Bloquear a un usuario específico (estado de usuario => activo/bloqueado) (no se
+    // pueden bloquear otros administradores)
+    router.put('/block-user/:id', authMiddleware('admin'), async (req, res) => {
+        try {
+            const { id: idUser } = req.user;
+            const { id: userId } = req.params;
+            const body = req.body;
+            const result = await adminServ.blockUserAdmin(idUser, userId, body);
             return res.status(200).json(result);
         } catch (error) {
             return errorResponse(res, error, 404);

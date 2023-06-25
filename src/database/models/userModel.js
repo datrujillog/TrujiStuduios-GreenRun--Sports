@@ -6,6 +6,12 @@ const UserRole = {
   SUPERADMIN: "superadmin",
 };
 
+const UserState = {
+  ACTIVE: "active",
+  BLOCKED: "blocked",
+  DELETED: "deleted",
+};
+
 module.exports = (sequelize) => {
   return sequelize.define("User", {
     id: {
@@ -84,6 +90,7 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: true,
       field: 'user_state',
+      defaultValue: 'active',
     },
     deleted: {
       type: DataTypes.BOOLEAN,

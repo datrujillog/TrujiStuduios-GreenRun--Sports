@@ -79,7 +79,9 @@ class BaseService {
     async findAllByField(field, value) {
         try {
             const entities = await this.model.findAll({ where: { [field]: value } });
+            // if (!entities.successfully) throw new Error(`The user ${value} does not exist`);
             return {
+                success: true,
                 count: entities.length,
                 entities
             };

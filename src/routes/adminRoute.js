@@ -7,10 +7,9 @@ const transactionService = require('../services/transactionService');
 const betsService = require('../services/betsService');
 const AdminService = require('../services/adminService');
 
-const { validateUpdateUser } = require('../middlewares/validateMiddleware');
 const authMiddleware = require('../middlewares/authValidation');
 
-const { authResponse, loginResponse, errorResponse } = require('../helpers/authResponse');
+const { errorResponse } = require('../helpers/authResponse');
 
 
 function adminRouter(app) {

@@ -1,11 +1,11 @@
 const { DataTypes } = require("sequelize");
 
 const TransactionCategory = {
-  DEPOSIT: "deposit",
-  WITHDRAW: "withdraw",
-  BET: "bet",
-  WINNING: "winning",
-  TRANSFER: "transfer",
+  DEPOSIT: "deposit", //despositado
+  WITHDRAW: "withdraw", //retirado
+  BET: "bet", //apostado
+  WINNING: "winning", //ganado
+  TRANSFER: "transfer", //transferido
 };
 
 module.exports = (sequelize) => {

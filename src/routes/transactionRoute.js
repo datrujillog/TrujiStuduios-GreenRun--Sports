@@ -47,7 +47,7 @@ function transactionRouter(app) {
         }
     });
 
-    router.get('/balance/:id', authMiddleware('user'), async (req, res) => {
+    router.get('/balance/:id', authMiddleware('adminUser'), async (req, res) => {
         try {
             const { id: userId } = req.user;
             const { id: requestedId } = req.params;

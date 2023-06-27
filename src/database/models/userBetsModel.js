@@ -22,6 +22,10 @@ module.exports = (sequelize) => {
         type: DataTypes.UUID,
         allowNull: false,
     },
+    odd: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+    },
     amount: {
         type: DataTypes.FLOAT,
         allowNull: false,

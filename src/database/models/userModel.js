@@ -87,7 +87,7 @@ module.exports = (sequelize) => {
       field: 'document_id',
     },
     userState: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM(...Object.values(UserState)),
       allowNull: true,
       field: 'user_state',
       defaultValue: 'active',

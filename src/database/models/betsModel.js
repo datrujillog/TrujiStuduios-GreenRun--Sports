@@ -1,14 +1,14 @@
 const { DataTypes } = require("sequelize");
 
 const BetStatus = {
-    ACTIVE: "active",
-    CANCELLED: "cancelled",
-    SETTLED: "settled",
+    ACTIVE: "active", // = activado
+    CANCELLED: "cancelled", // = cancelado
+    SETTLED: "settled", // = resuelto
 };
 
 const BetResult = {
-    WON: "won",
-    LOST: "lost",
+    WON: "won", // = ganado
+    LOST: "lost", // = perdido
 };
 
 module.exports = (sequelize) => {

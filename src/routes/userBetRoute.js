@@ -12,8 +12,8 @@ function userBetRouter(app) {
 
     app.use('/api/v1/userBets', router);
 
-
-    router.post('/', authMiddleware('user'), async (req, res) => {
+// ! Revisar el add de la apuesta
+    router.post('/', authMiddleware('adminUser'), async (req, res) => {
         try {
             const { id: userId } = req.user;
             const body = req.body;

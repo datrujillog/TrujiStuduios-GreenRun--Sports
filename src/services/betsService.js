@@ -2,14 +2,16 @@ const { Op } = require("sequelize");
 
 const BaseService = require('./baseService');
 const UserService = require('./userService');
+const transactionService = require("./transactionService");
 
-const { Bets: BetsModel } = require('../database/index');
-
+const { Bets: BetsModel, Transaction } = require('../database/index');
+const { UserBets: UserBetsModel } = require('../database/index');
 
 class betsService extends BaseService {
     constructor() {
         super(BetsModel);
         this.userServ = new UserService();
+        this.transactionServ = new transactionService();
     }
 
 
@@ -91,10 +93,10 @@ class betsService extends BaseService {
         if (bet.eventId !== eventId) throw new Error(`EventId ${eventId} does not match with bet ${betsId}.`);
 
         const betOptionString = Object.keys(bet.betOption).toString();
-        
+
         if (betOption !== betOptionString) throw new Error(`BetOption ${betOption} does not match with bet ${betsId}.`);
 
-        const {results:updatedBet} = await this.betsUpdate(idUser, userId, betsId, { status });
+        const { results: updatedBet } = await this.betsUpdate(idUser, userId, betsId, { status });
 
         return {
             success: true,
@@ -103,6 +105,62 @@ class betsService extends BaseService {
         }
     }
 
+    //! En Desarrollo resolver la liquidacion de lost no liquidar
+    //     F ). Resultados de apuestas resueltas(ganadas / perdidas)
+    // 
+    // Esta liquidación debería desencadenar pagos para los usuarios que hayan realizado una
+    // apuesta por la opción ganadora en caso de ganar
+
+    async patchBetResult(idUser, userId, body) {
+
+        const { results: user } = await this.userServ.userOne(userId, idUser);
+        const { results: best } = await this.betsOne(idUser, userId, body.betsId);
+
+        if (best.status === 'settled') throw new Error(`Bet ${body.betsId} is already settled.`);
+        if (best.status === 'cancelled') throw new Error(`Bet ${body.betsId} is already cancelled.`);
+        if (best.result === 'won') throw new Error(`Bet ${body.betsId} is already won.`);
+        if (best.result === 'lost') throw new Error(`Bet ${body.betsId} is already lost.`);
+
+        const result = await BetsModel.update({ result: body.result, status: body.status }, { where: { id: body.betsId } });
+        // !Analizar este punto 
+        //si la apuesta es lost no liquidar 
+        if (body.result === 'lost') { //si la apuesta es lost no liquidar solo actualizar el estado de la apuesta y de los usuarios que apostaron
+            const bestFilter = await UserBetsModel.findAll({ where: { betId: body.betsId, state: 'open' } });
+
+            for (const bet of bestFilter) {
+                await UserBetsModel.update({ status: body.status, result: body.result }, { where: { id: bet.id } });
+                
+            }
+            return {
+                success: true,
+                message: `la apuesta ha sido actualizada`,
+                results: result
+            }
+        }
+
+        //si la apuesta es won liquidar
+        
+        const bestFilter = await UserBetsModel.findAll({ where: { betId: body.betsId, state: 'open' } });
+
+        for (const bet of bestFilter) { 
+            var Sum = bet.odd * bet.amount;
+            await UserBetsModel.update({ status: body.status, result: body.result, amount: Sum }, { where: { id: bet.id } });
+            const dataTran = {
+                userId: bet.userId,
+                amount: Sum,
+                category: "winning",
+                status: "settled",
+                userBetId: "winning",
+            }
+            await Transaction.create(dataTran);
+        }
+
+        return {
+            success: true,
+            message: `la apuesta ha sido actualizada`,
+            results: result
+        }
+    }
 
 
 

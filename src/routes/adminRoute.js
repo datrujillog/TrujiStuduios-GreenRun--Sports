@@ -75,14 +75,26 @@ function adminRouter(app) {
         }
     });
 
-    // E ). Bloquear a un usuario específico (estado de usuario => activo/bloqueado) (no se
-    // pueden bloquear otros administradores)
+    // E ). Bloquear a un usuario específico (estado de usuario => activo/bloqueado) (no se pueden bloquear otros administradores)
     router.put('/block-user/:id', authMiddleware('admin'), async (req, res) => {
         try {
             const { id: idUser } = req.user;
             const { id: userId } = req.params;
             const body = req.body;
             const result = await adminServ.blockUserAdmin(idUser, userId, body);
+            return res.status(200).json(result);
+        } catch (error) {
+            return errorResponse(res, error, 404);
+        }
+    });
+
+    // F ). Resultados de apuestas resueltas(ganadas / perdidas) Esta liquidación debería desencadenar pagos para los usuarios que hayan realizado una apuesta por la opción ganadora en caso de ganar
+    router.patch('/bets/result/:id', authMiddleware('admin'), async (req, res) => {
+        try {
+            const { id: idUser } = req.user;
+            const { id: userId } = req.params;
+            const body = req.body;
+            const result = await betsServ.patchBetResult(idUser, userId, body);
             return res.status(200).json(result);
         } catch (error) {
             return errorResponse(res, error, 404);

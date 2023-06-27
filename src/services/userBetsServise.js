@@ -20,6 +20,7 @@ class betsUserService extends BaseService {
         this.transactionServ = new transactionService();
     }
 
+    // ! Revisar el add de la apuesta
     async createUserBet(userId, body) {
 
         await this.userServ.userOne(userId, body.userId);

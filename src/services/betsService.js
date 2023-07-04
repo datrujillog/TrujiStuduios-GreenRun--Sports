@@ -123,8 +123,8 @@ class betsService extends BaseService {
 
         const result = await BetsModel.update({ result: body.result, status: body.status }, { where: { id: body.betsId } });
         // !Analizar este punto 
-        //si la apuesta es lost no liquidar 
-        if (body.result === 'lost') { //si la apuesta es lost no liquidar solo actualizar el estado de la apuesta y de los usuarios que apostaron
+        
+        if (body.result === 'lost') { 
             const bestFilter = await UserBetsModel.findAll({ where: { betId: body.betsId, state: 'open' } });
 
             for (const bet of bestFilter) {

@@ -32,6 +32,11 @@ function AuthRouter(app) {
         const result = await authServ.signup(body);
         return result ? authResponse(res, result, 201) : authResponse(res, result, 400);
     });
+
+    router.get('/si', async (req, res) => {
+    return res.status(200).json({ message: 'Oe ue mas ' });
+    }
+    );
 }
 
 module.exports = AuthRouter;

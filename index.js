@@ -22,6 +22,9 @@ const transacción = require('./src/routes/transactionRoute');
 const userBets = require('./src/routes/userBetRoute');
 const admin = require('./src/routes/adminRoute');
 
+app.use(express.static(path.join(__dirname, 'public')));
+
+
 
 //Utilizamos Middlewares
 app.use(morgan('dev'));
@@ -45,6 +48,10 @@ userBets(app);
 admin(app);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(require('./src/libs/swagger/swagger.json')));
+
+app.get('/', (req, res) => {
+    res.send('Hello World!');
+});
 
 
 // catch 404 and forward to error handler
